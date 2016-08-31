@@ -62,7 +62,7 @@ var
     core_rnotwhite = /\S/,
     core_rspace = /\s+/,
 
-    // Make sure we trim BOM and NBSP (here's looking at you, Safari 5.0 and IE)
+    // 在IE9以下的浏览器中\s不匹配不间断的空格\xA0
     rtrim = /^[\s\uFEFF\xA0]+|[\s\uFEFF\xA0]+$/g,
 
     // ^(?:[^#<]*(<[\w\W]+>)[^>]*$ 匹配html字符串，不以#开头,#防止xss注入(#9521), 
@@ -304,9 +304,10 @@ var
 	    splice: [].splice
 	};
 
-	// Give the init function the jQuery prototype for later instantiation
+	// 使得jQuery.fn.init的实例可以访问构造函数jQuery的原型和属性
 	jQuery.fn.init.prototype = jQuery.fn;
-
+	// 参数列表 [deep] target [object...]
+	// deep为是否进行深度合并,如果只有target,直接把方法合并到jQuery或jQuery.fnshang 
 	jQuery.extend = jQuery.fn.extend = function() {
 	    var options, name, src, copy, copyIsArray, clone,
 	        target = arguments[0] || {},
@@ -314,39 +315,38 @@ var
 	        length = arguments.length,
 	        deep = false;
 
-	    // Handle a deep copy situation
+	    // 处理是否需要深度合并
 	    if ( typeof target === "boolean" ) {
 	        deep = target;
 	        target = arguments[1] || {};
-	        // skip the boolean and the target
+	        // 修正源对象的下标
 	        i = 2;
 	    }
 
-	    // Handle case when target is a string or something (possible in deep copy)
+	    // 如果目前对象不是对象和方法，统一替换为{}
 	    if ( typeof target !== "object" && !jQuery.isFunction(target) ) {
 	        target = {};
 	    }
 
-	    // extend jQuery itself if only one argument is passed
+	    // 如果没有传入源对象，则把目标对象置为jquery，同时将传入的对象当作源对象
 	    if ( length === i ) {
 	        target = this;
 	        --i;
 	    }
 
 	    for ( ; i < length; i++ ) {
-	        // Only deal with non-null/undefined values
+	        // 如果源对象为空，不处理
 	        if ( (options = arguments[ i ]) != null ) {
-	            // Extend the base object
 	            for ( name in options ) {
 	                src = target[ name ];
 	                copy = options[ name ];
 
-	                // Prevent never-ending loop
+	             // 如果复制的值与目标对象相等，为了避免深度遍历死循环，不做操作
 	                if ( target === copy ) {
 	                    continue;
 	                }
 
-	                // Recurse if we're merging plain objects or arrays
+	                // 如果为深度合并，复制的值为对象和数组，则递归合并
 	                if ( deep && copy && ( jQuery.isPlainObject(copy) || (copyIsArray = jQuery.isArray(copy)) ) ) {
 	                    if ( copyIsArray ) {
 	                        copyIsArray = false;
@@ -356,10 +356,10 @@ var
 	                        clone = src && jQuery.isPlainObject(src) ? src : {};
 	                    }
 
-	                    // Never move original objects, clone them
+	                    // 源对象和目标对象不覆盖，深度复制
 	                    target[ name ] = jQuery.extend( deep, clone, copy );
 
-	                    // Don't bring in undefined values
+	                    // 不是深度合并，直接覆盖同名属性
 	                } else if ( copy !== undefined ) {
 	                    target[ name ] = copy;
 	                }
@@ -367,11 +367,12 @@ var
 	        }
 	    }
 
-	    // Return the modified object
+	    // 返回目标源
 	    return target;
 	};
 
 	jQuery.extend({
+		// 用于释放jQuery对全局变量$的控制权，deep表示是否释放对jQuery的控制权
 	    noConflict: function( deep ) {
 	        if ( window.$ === jQuery ) {
 	            window.$ = _$;
@@ -384,14 +385,13 @@ var
 	        return jQuery;
 	    },
 
-	    // Is the DOM ready to be used? Set to true once it occurs.
+	    // Ready状态标记
 	    isReady: false,
 
-	    // A counter to track how many items to wait for before
-	    // the ready event fires. See #6781
+	    // Ready等待计数器
 	    readyWait: 1,
 
-	    // Hold (or release) the ready event
+	    // 延迟或恢复Ready触发，hold true为延迟执行， false为恢复
 	    holdReady: function( hold ) {
 	        if ( hold ) {
 	            jQuery.readyWait++;
@@ -400,11 +400,12 @@ var
 	        }
 	    },
 
-	    // Handle when the DOM is ready
+	    // 执行ready事件监听函数列表readyList
 	    ready: function( wait ) {
 
-	        // Abort if there are pending holds or we're already ready
 	        if ( wait === true ? --jQuery.readyWait : jQuery.isReady ) {
+
+		        // 有延迟ready或者已经执行过了的情况
 	            return;
 	        }
 
@@ -413,58 +414,57 @@ var
 	            return setTimeout( jQuery.ready, 1 );
 	        }
 
-	        // Remember that the DOM is ready
+	        // 标记ready事件就绪
 	        jQuery.isReady = true;
 
-	        // If a normal DOM Ready event fired, decrement, and wait if need be
+	        // 防御性检测，如果jQuery.readyWait-1后仍大于0，说明ready事件延迟尚未全部恢复，则返回，等待再次执行jQuery.holdReady(false)
 	        if ( wait !== true && --jQuery.readyWait > 0 ) {
 	            return;
 	        }
 
-	        // If there are functions bound, to execute
+	        // document 事件监听函数上下文  jQuery指定了ready事件监听函数的列表
 	        readyList.resolveWith( document, [ jQuery ] );
 
-	        // Trigger any bound ready events
+	        // 执行通过$(document).on("ready",handler)绑定的ready事件监听函数
 	        if ( jQuery.fn.trigger ) {
 	            jQuery( document ).trigger("ready").off("ready");
 	        }
 	    },
 
-	    // See test/unit/core.js for details concerning isFunction.
-	    // Since version 1.3, DOM methods and functions like alert
-	    // aren't supported. They return false on IE (#2968).
+	    // 判断该obj是否为函数
 	    isFunction: function( obj ) {
 	        return jQuery.type(obj) === "function";
 	    },
-
+	    // 判断该obj是否为函数,在ie9之上可直接使用原生的判断
 	    isArray: Array.isArray || function( obj ) {
 	        return jQuery.type(obj) === "array";
 	    },
-
+	    // 通过检测特征属性window来判断传入的对象是否是window对象
 	    isWindow: function( obj ) {
 	        return obj != null && obj == obj.window;
 	    },
-
+	    // 判断obj是否为一个数字，首先会判断是否是一个数字，然后判断该数字是否是有限数字
 	    isNumeric: function( obj ) {
 	        return !isNaN( parseFloat(obj) ) && isFinite( obj );
 	    },
-
+	    // 用来判断参数内建的Javascript类型,如果参数为null或undefined,返回"null","undefined"
+	    // 使用core_toString而不用obj.toString是防止某些obj重写该方法导致判断不准确
 	    type: function( obj ) {
 	        return obj == null ?
 	            String( obj ) :
 	        class2type[ core_toString.call(obj) ] || "object";
 	    },
-
+	    // 判断obj是否是一个简单对象，即通过对象直接量{}或new object()创建的
 	    isPlainObject: function( obj ) {
-	        // Must be an Object.
-	        // Because of IE, we also have to check the presence of the constructor property.
-	        // Make sure that DOM nodes and window objects don't pass through, as well
+	        // 必须是一个对象，不通过DOM节点和window对象
 	        if ( !obj || jQuery.type(obj) !== "object" || obj.nodeType || jQuery.isWindow( obj ) ) {
 	            return false;
 	        }
 
 	        try {
-	            // Not own constructor property must be Object
+	            // obj.constructo 为false 对应的是对象直接量
+	        	// 默认constructor都是原型属性，hasOwnProperty返回true,则可表明肯定自定义构造函数覆盖了constructor
+	        	// isPrototypeOf 是Object原型上的特有属性，如果原型对象上没有该isPrototypeOf，则肯定不是object对象
 	            if ( obj.constructor &&
 	                !core_hasOwn.call(obj, "constructor") &&
 	                !core_hasOwn.call(obj.constructor.prototype, "isPrototypeOf") ) {
@@ -475,15 +475,14 @@ var
 	            return false;
 	        }
 
-	        // Own properties are enumerated firstly, so to speed up,
-	        // if last one is own, then all properties are own.
+	        // for in循环是会先循环实例属性，然后循环原型属性，如果循环的最后一个是原型属性，则不是new Object()
 
 	        var key;
 	        for ( key in obj ) {}
 
 	        return key === undefined || core_hasOwn.call( obj, key );
 	    },
-
+	    // 检测obj是否为空对象
 	    isEmptyObject: function( obj ) {
 	        var name;
 	        for ( name in obj ) {
@@ -520,22 +519,21 @@ var
 	        return jQuery.merge( [],
 	            (parsed.cacheable ? jQuery.clone( parsed.fragment ) : parsed.fragment).childNodes );
 	    },
-
+	    // data为格式良好的json字符串，返回解析后的javascript对象
 	    parseJSON: function( data ) {
 	        if ( !data || typeof data !== "string") {
 	            return null;
 	        }
 
-	        // Make sure leading/trailing whitespace is removed (IE can't handle it)
+	        // 移除开头和末尾的空白符，在ie6/7中，如果有空白符就不能正确的解析
 	        data = jQuery.trim( data );
 
-	        // Attempt to parse using the native JSON parser first
+	        // 如果支持原生的解析，优先使用原生的
 	        if ( window.JSON && window.JSON.parse ) {
 	            return window.JSON.parse( data );
 	        }
 
-	        // Make sure the incoming data is actual JSON
-	        // Logic borrowed from http://json.org/json2.js
+	        // 确保传入的字符串是一个真正的json字符串，从json2.js的逻辑中拷贝来的
 	        if ( rvalidchars.test( data.replace( rvalidescape, "@" )
 	                .replace( rvalidtokens, "]" )
 	                .replace( rvalidbraces, "")) ) {
@@ -546,7 +544,7 @@ var
 	        jQuery.error( "Invalid JSON: " + data );
 	    },
 
-	    // Cross-browser xml parsing
+	    // 接收一个良好格式的XML字符串，返回解析后的XML文档
 	    parseXML: function( data ) {
 	        var xml, tmp;
 	        if ( !data || typeof data !== "string" ) {
@@ -556,7 +554,8 @@ var
 	            if ( window.DOMParser ) { // Standard
 	                tmp = new DOMParser();
 	                xml = tmp.parseFromString( data , "text/xml" );
-	            } else { // IE
+	            } else { 
+	            	//低版本的ie使用ActiveXObject对象来解析
 	                xml = new ActiveXObject( "Microsoft.XMLDOM" );
 	                xml.async = "false";
 	                xml.loadXML( data );
@@ -572,22 +571,18 @@ var
 
 	    noop: function() {},
 
-	    // Evaluates a script in a global context
-	    // Workarounds based on findings by Jim Driscoll
-	    // http://weblogs.java.net/blog/driscoll/archive/2009/09/08/eval-javascript-global-context
+	    // 全局作用域执行javascript代码
 	    globalEval: function( data ) {
 	        if ( data && core_rnotwhite.test( data ) ) {
-	            // We use execScript on Internet Explorer
-	            // We use an anonymous function so that context is window
-	            // rather than jQuery in Firefox
+	            // 在ie下直接执行execScript方法让javascript全局作用域执行
+	            // 否则用匿名函数执行，上下文设置为window，因为在火狐中上下文为jquery
 	            ( window.execScript || function( data ) {
 	                window[ "eval" ].call( window, data );
 	            } )( data );
 	        }
 	    },
 
-	    // Convert dashed to camelCase; used by the css and data modules
-	    // Microsoft forgot to hump their vendor prefix (#9572)
+	    // 转换连字符的字符串为驼峰式，用于CSS模块和数据缓存模块 camelCase('background-color')==>backgroundColor
 	    camelCase: function( string ) {
 	        return string.replace( rmsPrefix, "ms-" ).replace( rdashAlpha, fcamelCase );
 	    },
@@ -653,7 +648,7 @@ var
 	                ( text + "" ).replace( rtrim, "" );
 	        },
 
-	    // results is for internal usage only
+	    // 将一个类数组转换成真正的数组 arr==> 待转换类型 results==>仅在jquery内部使用
 	    makeArray: function( arr, results ) {
 	        var type,
 	            ret = results || [];
@@ -917,7 +912,7 @@ var
 	    return readyList.promise( obj );
 	};
 
-	// Populate the class2type map
+	// 初始化class2type变量，供jquery.type使用
 	jQuery.each("Boolean Number String Function Array Date RegExp Object".split(" "), function(i, name) {
 	    class2type[ "[object " + name + "]" ] = name.toLowerCase();
 	});
