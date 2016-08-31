@@ -252,7 +252,7 @@ http:<span class="hljs-comment">//jquery.org/license</span>
               <div class="pilwrap ">
                 <a class="pilcrow" href="#section-15">&#182;</a>
               </div>
-              <p>Make sure we trim BOM and NBSP (here’s looking at you, Safari 5.0 and IE)</p>
+              <p>在IE9以下的浏览器中\s不匹配不间断的空格\xA0</p>
 
             </div>
             
@@ -1947,9 +1947,7 @@ scripts (optional): If true, will include scripts passed in the html string</p>
               <div class="pilwrap ">
                 <a class="pilcrow" href="#section-111">&#182;</a>
               </div>
-              <p>Evaluates a script in a global context
-Workarounds based on findings by Jim Driscoll
-<a href="http://weblogs.java.net/blog/driscoll/archive/2009/09/08/eval-javascript-global-context">http://weblogs.java.net/blog/driscoll/archive/2009/09/08/eval-javascript-global-context</a></p>
+              <p>全局作用域执行javascript代码</p>
 
             </div>
             
@@ -1965,9 +1963,8 @@ Workarounds based on findings by Jim Driscoll
               <div class="pilwrap ">
                 <a class="pilcrow" href="#section-112">&#182;</a>
               </div>
-              <p>We use execScript on Internet Explorer
-We use an anonymous function so that context is window
-rather than jQuery in Firefox</p>
+              <p>在ie下直接执行execScript方法让javascript全局作用域执行
+否则用匿名函数执行，上下文设置为window，因为在火狐中上下文为jquery</p>
 
             </div>
             
@@ -1986,8 +1983,7 @@ rather than jQuery in Firefox</p>
               <div class="pilwrap ">
                 <a class="pilcrow" href="#section-113">&#182;</a>
               </div>
-              <p>Convert dashed to camelCase; used by the css and data modules
-Microsoft forgot to hump their vendor prefix (#9572)</p>
+              <p>转换连字符的字符串为驼峰式，用于CSS模块和数据缓存模块 camelCase(‘background-color’)==&gt;backgroundColor</p>
 
             </div>
             
@@ -2113,7 +2109,7 @@ Microsoft forgot to hump their vendor prefix (#9572)</p>
               <div class="pilwrap ">
                 <a class="pilcrow" href="#section-118">&#182;</a>
               </div>
-              <p>results is for internal usage only</p>
+              <p>将一个类数组转换成真正的数组 arr==&gt; 待转换类型 results==&gt;仅在jquery内部使用</p>
 
             </div>
             
