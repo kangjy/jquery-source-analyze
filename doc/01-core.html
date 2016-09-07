@@ -11,6 +11,29 @@
   <div id="container">
     <div id="background"></div>
     
+      <ul id="jump_to">
+        <li>
+          <a class="large" href="javascript:void(0);">Jump To &hellip;</a>
+          <a class="small" href="javascript:void(0);">+</a>
+          <div id="jump_wrapper">
+          <div id="jump_page_wrapper">
+            <div id="jump_page">
+              
+                
+                <a class="source" href="01-core.html">
+                  01-core.js
+                </a>
+              
+                
+                <a class="source" href="02-deferred.html">
+                  02-deferred.js
+                </a>
+              
+            </div>
+          </div>
+        </li>
+      </ul>
+    
     <ul class="sections">
         
           <li id="title">
@@ -62,7 +85,6 @@ http:<span class="hljs-comment">//jquery.org/license</span>
                 <a class="pilcrow" href="#section-3">&#182;</a>
               </div>
               <h3 id="-">第一章: 框架核心</h3>
-<hr>
 
             </div>
             
@@ -1732,10 +1754,6 @@ isPrototypeOf 是Object原型上的特有属性，如果原型对象上没有该
 	            <span class="hljs-keyword">return</span> <span class="hljs-literal">false</span>;
 	        }
 	        <span class="hljs-keyword">return</span> <span class="hljs-literal">true</span>;
-	    },
-
-	    error: <span class="hljs-function"><span class="hljs-keyword">function</span>(<span class="hljs-params"> msg </span>) </span>{
-	        <span class="hljs-keyword">throw</span> <span class="hljs-keyword">new</span> <span class="hljs-built_in">Error</span>( msg );
 	    },</pre></div></div>
             
         </li>
@@ -1746,6 +1764,23 @@ isPrototypeOf 是Object原型上的特有属性，如果原型对象上没有该
               
               <div class="pilwrap ">
                 <a class="pilcrow" href="#section-101">&#182;</a>
+              </div>
+              <p>接收一个字符串，抛出一个错误异常，开发插件可覆盖这个方法，来显示更多的错误信息</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>	    error: <span class="hljs-function"><span class="hljs-keyword">function</span>(<span class="hljs-params"> msg </span>) </span>{
+	        <span class="hljs-keyword">throw</span> <span class="hljs-keyword">new</span> <span class="hljs-built_in">Error</span>( msg );
+	    },</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-102">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-102">&#182;</a>
               </div>
               <p>data: string of html
 context (optional): If specified, the fragment will be created in this context, defaults to document
@@ -1762,11 +1797,11 @@ scripts (optional): If true, will include scripts passed in the html string</p>
         </li>
         
         
-        <li id="section-102">
+        <li id="section-103">
             <div class="annotation">
               
               <div class="pilwrap ">
-                <a class="pilcrow" href="#section-102">&#182;</a>
+                <a class="pilcrow" href="#section-103">&#182;</a>
               </div>
               <p>非常巧妙的处理了parseHTML(data,true)的情况</p>
 
@@ -1781,11 +1816,11 @@ scripts (optional): If true, will include scripts passed in the html string</p>
         </li>
         
         
-        <li id="section-103">
+        <li id="section-104">
             <div class="annotation">
               
               <div class="pilwrap ">
-                <a class="pilcrow" href="#section-103">&#182;</a>
+                <a class="pilcrow" href="#section-104">&#182;</a>
               </div>
               <p>如果是单标签，直接返回创建好的dom节点</p>
 
@@ -1798,11 +1833,11 @@ scripts (optional): If true, will include scripts passed in the html string</p>
         </li>
         
         
-        <li id="section-104">
+        <li id="section-105">
             <div class="annotation">
               
               <div class="pilwrap ">
-                <a class="pilcrow" href="#section-104">&#182;</a>
+                <a class="pilcrow" href="#section-105">&#182;</a>
               </div>
               <p>在DOM操作模块单独说明，</p>
 
@@ -1816,11 +1851,11 @@ scripts (optional): If true, will include scripts passed in the html string</p>
         </li>
         
         
-        <li id="section-105">
+        <li id="section-106">
             <div class="annotation">
               
               <div class="pilwrap ">
-                <a class="pilcrow" href="#section-105">&#182;</a>
+                <a class="pilcrow" href="#section-106">&#182;</a>
               </div>
               <p>data为格式良好的json字符串，返回解析后的javascript对象</p>
 
@@ -1834,11 +1869,11 @@ scripts (optional): If true, will include scripts passed in the html string</p>
         </li>
         
         
-        <li id="section-106">
+        <li id="section-107">
             <div class="annotation">
               
               <div class="pilwrap ">
-                <a class="pilcrow" href="#section-106">&#182;</a>
+                <a class="pilcrow" href="#section-107">&#182;</a>
               </div>
               <p>移除开头和末尾的空白符，在ie6/7中，如果有空白符就不能正确的解析</p>
 
@@ -1849,11 +1884,11 @@ scripts (optional): If true, will include scripts passed in the html string</p>
         </li>
         
         
-        <li id="section-107">
+        <li id="section-108">
             <div class="annotation">
               
               <div class="pilwrap ">
-                <a class="pilcrow" href="#section-107">&#182;</a>
+                <a class="pilcrow" href="#section-108">&#182;</a>
               </div>
               <p>如果支持原生的解析，优先使用原生的</p>
 
@@ -1866,11 +1901,11 @@ scripts (optional): If true, will include scripts passed in the html string</p>
         </li>
         
         
-        <li id="section-108">
+        <li id="section-109">
             <div class="annotation">
               
               <div class="pilwrap ">
-                <a class="pilcrow" href="#section-108">&#182;</a>
+                <a class="pilcrow" href="#section-109">&#182;</a>
               </div>
               <p>确保传入的字符串是一个真正的json字符串，从json2.js的逻辑中拷贝来的</p>
 
@@ -1889,11 +1924,11 @@ scripts (optional): If true, will include scripts passed in the html string</p>
         </li>
         
         
-        <li id="section-109">
+        <li id="section-110">
             <div class="annotation">
               
               <div class="pilwrap ">
-                <a class="pilcrow" href="#section-109">&#182;</a>
+                <a class="pilcrow" href="#section-110">&#182;</a>
               </div>
               <p>接收一个良好格式的XML字符串，返回解析后的XML文档</p>
 
@@ -1913,11 +1948,11 @@ scripts (optional): If true, will include scripts passed in the html string</p>
         </li>
         
         
-        <li id="section-110">
+        <li id="section-111">
             <div class="annotation">
               
               <div class="pilwrap ">
-                <a class="pilcrow" href="#section-110">&#182;</a>
+                <a class="pilcrow" href="#section-111">&#182;</a>
               </div>
               <p>低版本的ie使用ActiveXObject对象来解析</p>
 
@@ -1934,18 +1969,31 @@ scripts (optional): If true, will include scripts passed in the html string</p>
 	            jQuery.error( <span class="hljs-string">"Invalid XML: "</span> + data );
 	        }
 	        <span class="hljs-keyword">return</span> xml;
-	    },
-
-	    noop: <span class="hljs-function"><span class="hljs-keyword">function</span>(<span class="hljs-params"></span>) </span>{},</pre></div></div>
+	    },</pre></div></div>
             
         </li>
         
         
-        <li id="section-111">
+        <li id="section-112">
             <div class="annotation">
               
               <div class="pilwrap ">
-                <a class="pilcrow" href="#section-111">&#182;</a>
+                <a class="pilcrow" href="#section-112">&#182;</a>
+              </div>
+              <p>空函数，可以作为回调函数的默认值</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>	    noop: <span class="hljs-function"><span class="hljs-keyword">function</span>(<span class="hljs-params"></span>) </span>{},</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-113">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-113">&#182;</a>
               </div>
               <p>全局作用域执行javascript代码</p>
 
@@ -1957,11 +2005,11 @@ scripts (optional): If true, will include scripts passed in the html string</p>
         </li>
         
         
-        <li id="section-112">
+        <li id="section-114">
             <div class="annotation">
               
               <div class="pilwrap ">
-                <a class="pilcrow" href="#section-112">&#182;</a>
+                <a class="pilcrow" href="#section-114">&#182;</a>
               </div>
               <p>在ie下直接执行execScript方法让javascript全局作用域执行
 否则用匿名函数执行，上下文设置为window，因为在火狐中上下文为jquery</p>
@@ -1977,11 +2025,11 @@ scripts (optional): If true, will include scripts passed in the html string</p>
         </li>
         
         
-        <li id="section-113">
+        <li id="section-115">
             <div class="annotation">
               
               <div class="pilwrap ">
-                <a class="pilcrow" href="#section-113">&#182;</a>
+                <a class="pilcrow" href="#section-115">&#182;</a>
               </div>
               <p>转换连字符的字符串为驼峰式，用于CSS模块和数据缓存模块 camelCase(‘background-color’)==&gt;backgroundColor</p>
 
@@ -1998,21 +2046,35 @@ scripts (optional): If true, will include scripts passed in the html string</p>
         </li>
         
         
-        <li id="section-114">
+        <li id="section-116">
             <div class="annotation">
               
               <div class="pilwrap ">
-                <a class="pilcrow" href="#section-114">&#182;</a>
+                <a class="pilcrow" href="#section-116">&#182;</a>
               </div>
-              <p>args is for internal usage only</p>
+              <p>静态方法each是一个通用的遍历迭代的方法，用于遍历数组和类数组对象，obj==&gt;待遍历的对象，callback==&gt;回调函数，数组每个元素都执行，args==&gt;该参数会传递给回调函数</p>
 
             </div>
             
             <div class="content"><div class='highlight'><pre>	    each: <span class="hljs-function"><span class="hljs-keyword">function</span>(<span class="hljs-params"> obj, callback, args </span>) </span>{
 	        <span class="hljs-keyword">var</span> name,
 	            i = <span class="hljs-number">0</span>,
-	            length = obj.length,
-	            isObj = length === <span class="hljs-literal">undefined</span> || jQuery.isFunction( obj );
+	            length = obj.length,</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-117">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-117">&#182;</a>
+              </div>
+              <p>判断obj是对象还是数组</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>	            isObj = length === <span class="hljs-literal">undefined</span> || jQuery.isFunction( obj );
 
 	        <span class="hljs-keyword">if</span> ( args ) {
 	            <span class="hljs-keyword">if</span> ( isObj ) {
@@ -2032,13 +2094,13 @@ scripts (optional): If true, will include scripts passed in the html string</p>
         </li>
         
         
-        <li id="section-115">
+        <li id="section-118">
             <div class="annotation">
               
               <div class="pilwrap ">
-                <a class="pilcrow" href="#section-115">&#182;</a>
+                <a class="pilcrow" href="#section-118">&#182;</a>
               </div>
-              <p>A special, fast, case for the most common use of each</p>
+              <p>如果没有传入参数参数args，则传入下标和属性名</p>
 
             </div>
             
@@ -2064,19 +2126,33 @@ scripts (optional): If true, will include scripts passed in the html string</p>
         </li>
         
         
-        <li id="section-116">
+        <li id="section-119">
             <div class="annotation">
               
               <div class="pilwrap ">
-                <a class="pilcrow" href="#section-116">&#182;</a>
+                <a class="pilcrow" href="#section-119">&#182;</a>
               </div>
-              <p>Use native String.trim function wherever possible</p>
+              <p>用于移除字符串开头和结尾的空白符</p>
 
             </div>
             
             <div class="content"><div class='highlight'><pre>	    trim: core_trim &amp;&amp; !core_trim.call(<span class="hljs-string">"\uFEFF\xA0"</span>) ?
-	        <span class="hljs-function"><span class="hljs-keyword">function</span>(<span class="hljs-params"> text </span>) </span>{
-	            <span class="hljs-keyword">return</span> text == <span class="hljs-literal">null</span> ?
+	        <span class="hljs-function"><span class="hljs-keyword">function</span>(<span class="hljs-params"> text </span>) </span>{</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-120">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-120">&#182;</a>
+              </div>
+              <p>使用ES5新增的string方法</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>	            <span class="hljs-keyword">return</span> text == <span class="hljs-literal">null</span> ?
 	                <span class="hljs-string">""</span> :
 	                core_trim.call( text );
 	        } :</pre></div></div>
@@ -2084,18 +2160,32 @@ scripts (optional): If true, will include scripts passed in the html string</p>
         </li>
         
         
-        <li id="section-117">
+        <li id="section-121">
             <div class="annotation">
               
               <div class="pilwrap ">
-                <a class="pilcrow" href="#section-117">&#182;</a>
+                <a class="pilcrow" href="#section-121">&#182;</a>
               </div>
-              <p>Otherwise use our own trimming functionality</p>
+              <p>如果不支持ES5,则使用字符串替换的方式来移除空白字符</p>
 
             </div>
             
-            <div class="content"><div class='highlight'><pre>	        <span class="hljs-function"><span class="hljs-keyword">function</span>(<span class="hljs-params"> text </span>) </span>{
-	            <span class="hljs-keyword">return</span> text == <span class="hljs-literal">null</span> ?
+            <div class="content"><div class='highlight'><pre>	        <span class="hljs-function"><span class="hljs-keyword">function</span>(<span class="hljs-params"> text </span>) </span>{</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-122">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-122">&#182;</a>
+              </div>
+              <p>text +”” 获取到text的字符串表示，然后用正则替换空白字符串</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>	            <span class="hljs-keyword">return</span> text == <span class="hljs-literal">null</span> ?
 	                <span class="hljs-string">""</span> :
 	                ( text + <span class="hljs-string">""</span> ).replace( rtrim, <span class="hljs-string">""</span> );
 	        },</pre></div></div>
@@ -2103,11 +2193,11 @@ scripts (optional): If true, will include scripts passed in the html string</p>
         </li>
         
         
-        <li id="section-118">
+        <li id="section-123">
             <div class="annotation">
               
               <div class="pilwrap ">
-                <a class="pilcrow" href="#section-118">&#182;</a>
+                <a class="pilcrow" href="#section-123">&#182;</a>
               </div>
               <p>将一个类数组转换成真正的数组 arr==&gt; 待转换类型 results==&gt;仅在jquery内部使用</p>
 
@@ -2122,11 +2212,11 @@ scripts (optional): If true, will include scripts passed in the html string</p>
         </li>
         
         
-        <li id="section-119">
+        <li id="section-124">
             <div class="annotation">
               
               <div class="pilwrap ">
-                <a class="pilcrow" href="#section-119">&#182;</a>
+                <a class="pilcrow" href="#section-124">&#182;</a>
               </div>
               <p>The window, strings (and functions) also have ‘length’
 Tweaked logic slightly to handle Blackberry 4.7 RegExp issues #6930</p>
@@ -2143,9 +2233,22 @@ Tweaked logic slightly to handle Blackberry 4.7 RegExp issues #6930</p>
 	        }
 
 	        <span class="hljs-keyword">return</span> ret;
-	    },
+	    },</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-125">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-125">&#182;</a>
+              </div>
+              <p>在数组中查找指定的元素并返回其下标，如果为找到会返回-1 elem==&gt;要查找的值 arr==&gt;待遍历的数组 i==&gt;指定查找的位置，默认为0</p>
 
-	    inArray: <span class="hljs-function"><span class="hljs-keyword">function</span>(<span class="hljs-params"> elem, arr, i </span>) </span>{
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>	    inArray: <span class="hljs-function"><span class="hljs-keyword">function</span>(<span class="hljs-params"> elem, arr, i </span>) </span>{
 	        <span class="hljs-keyword">var</span> len;
 
 	        <span class="hljs-keyword">if</span> ( arr ) {
@@ -2153,21 +2256,35 @@ Tweaked logic slightly to handle Blackberry 4.7 RegExp issues #6930</p>
 	                <span class="hljs-keyword">return</span> core_indexOf.call( arr, elem, i );
 	            }
 
-	            len = arr.length;
-	            i = i ? i &lt; <span class="hljs-number">0</span> ? <span class="hljs-built_in">Math</span>.max( <span class="hljs-number">0</span>, len + i ) : i : <span class="hljs-number">0</span>;
+	            len = arr.length;</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-126">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-126">&#182;</a>
+              </div>
+              <p>修正参数i，默认为0，如果小于0，则加上len</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>	            i = i ? i &lt; <span class="hljs-number">0</span> ? <span class="hljs-built_in">Math</span>.max( <span class="hljs-number">0</span>, len + i ) : i : <span class="hljs-number">0</span>;
 
 	            <span class="hljs-keyword">for</span> ( ; i &lt; len; i++ ) {</pre></div></div>
             
         </li>
         
         
-        <li id="section-120">
+        <li id="section-127">
             <div class="annotation">
               
               <div class="pilwrap ">
-                <a class="pilcrow" href="#section-120">&#182;</a>
+                <a class="pilcrow" href="#section-127">&#182;</a>
               </div>
-              <p>Skip accessing in sparse arrays</p>
+              <p>如果i in arr返回false，说明数组是不连续的也就不需要和指定值elem比较了</p>
 
             </div>
             
@@ -2178,9 +2295,22 @@ Tweaked logic slightly to handle Blackberry 4.7 RegExp issues #6930</p>
 	        }
 
 	        <span class="hljs-keyword">return</span> <span class="hljs-number">-1</span>;
-	    },
+	    },</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-128">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-128">&#182;</a>
+              </div>
+              <p>合并第二个数组和类数组到第一个数组或类数组中</p>
 
-	    merge: <span class="hljs-function"><span class="hljs-keyword">function</span>(<span class="hljs-params"> first, second </span>) </span>{
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>	    merge: <span class="hljs-function"><span class="hljs-keyword">function</span>(<span class="hljs-params"> first, second </span>) </span>{
 	        <span class="hljs-keyword">var</span> l = second.length,
 	            i = first.length,
 	            j = <span class="hljs-number">0</span>;
@@ -2190,8 +2320,22 @@ Tweaked logic slightly to handle Blackberry 4.7 RegExp issues #6930</p>
 	                first[ i++ ] = second[ j ];
 	            }
 
-	        } <span class="hljs-keyword">else</span> {
-	            <span class="hljs-keyword">while</span> ( second[j] !== <span class="hljs-literal">undefined</span> ) {
+	        } <span class="hljs-keyword">else</span> {</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-129">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-129">&#182;</a>
+              </div>
+              <p>second 不是类数组，但是含有连续整形属性的对象</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>	            <span class="hljs-keyword">while</span> ( second[j] !== <span class="hljs-literal">undefined</span> ) {
 	                first[ i++ ] = second[ j++ ];
 	            }
 	        }
@@ -2199,30 +2343,29 @@ Tweaked logic slightly to handle Blackberry 4.7 RegExp issues #6930</p>
 	        first.length = i;
 
 	        <span class="hljs-keyword">return</span> first;
-	    },
-
-	    grep: <span class="hljs-function"><span class="hljs-keyword">function</span>(<span class="hljs-params"> elems, callback, inv </span>) </span>{
-	        <span class="hljs-keyword">var</span> retVal,
-	            ret = [],
-	            i = <span class="hljs-number">0</span>,
-	            length = elems.length;
-	        inv = !!inv;</pre></div></div>
+	    },</pre></div></div>
             
         </li>
         
         
-        <li id="section-121">
+        <li id="section-130">
             <div class="annotation">
               
               <div class="pilwrap ">
-                <a class="pilcrow" href="#section-121">&#182;</a>
+                <a class="pilcrow" href="#section-130">&#182;</a>
               </div>
-              <p>Go through the array, only saving the items
-that pass the validator function</p>
+              <p>用于查找数组中满足过滤函数的元素，原数组不受影响 inv==&gt;为true是则返回一个不满足回调函数的元素数组</p>
 
             </div>
             
-            <div class="content"><div class='highlight'><pre>	        <span class="hljs-keyword">for</span> ( ; i &lt; length; i++ ) {
+            <div class="content"><div class='highlight'><pre>	    grep: <span class="hljs-function"><span class="hljs-keyword">function</span>(<span class="hljs-params"> elems, callback, inv </span>) </span>{
+	        <span class="hljs-keyword">var</span> retVal,
+	            ret = [],
+	            i = <span class="hljs-number">0</span>,
+	            length = elems.length;
+	        inv = !!inv;
+
+	        <span class="hljs-keyword">for</span> ( ; i &lt; length; i++ ) {
 	            retVal = !!callback( elems[ i ], i );
 	            <span class="hljs-keyword">if</span> ( inv !== retVal ) {
 	                ret.push( elems[ i ] );
@@ -2235,13 +2378,13 @@ that pass the validator function</p>
         </li>
         
         
-        <li id="section-122">
+        <li id="section-131">
             <div class="annotation">
               
               <div class="pilwrap ">
-                <a class="pilcrow" href="#section-122">&#182;</a>
+                <a class="pilcrow" href="#section-131">&#182;</a>
               </div>
-              <p>arg is for internal usage only</p>
+              <p>静态方法对数组中的每个元素或对象的每个属性调用回调函数，并把回调函数的返回值放的 一个新的数组中</p>
 
             </div>
             
@@ -2254,11 +2397,11 @@ that pass the validator function</p>
         </li>
         
         
-        <li id="section-123">
+        <li id="section-132">
             <div class="annotation">
               
               <div class="pilwrap ">
-                <a class="pilcrow" href="#section-123">&#182;</a>
+                <a class="pilcrow" href="#section-132">&#182;</a>
               </div>
               <p>jquery objects are treated as arrays</p>
 
@@ -2269,13 +2412,13 @@ that pass the validator function</p>
         </li>
         
         
-        <li id="section-124">
+        <li id="section-133">
             <div class="annotation">
               
               <div class="pilwrap ">
-                <a class="pilcrow" href="#section-124">&#182;</a>
+                <a class="pilcrow" href="#section-133">&#182;</a>
               </div>
-              <p>Go through the array, translating each of the items to their</p>
+              <p>遍历数组</p>
 
             </div>
             
@@ -2291,13 +2434,13 @@ that pass the validator function</p>
         </li>
         
         
-        <li id="section-125">
+        <li id="section-134">
             <div class="annotation">
               
               <div class="pilwrap ">
-                <a class="pilcrow" href="#section-125">&#182;</a>
+                <a class="pilcrow" href="#section-134">&#182;</a>
               </div>
-              <p>Go through every key on the object,</p>
+              <p>遍历对象</p>
 
             </div>
             
@@ -2314,13 +2457,13 @@ that pass the validator function</p>
         </li>
         
         
-        <li id="section-126">
+        <li id="section-135">
             <div class="annotation">
               
               <div class="pilwrap ">
-                <a class="pilcrow" href="#section-126">&#182;</a>
+                <a class="pilcrow" href="#section-135">&#182;</a>
               </div>
-              <p>Flatten any nested arrays</p>
+              <p>优雅的实现数组二位数组降维，可以理解成[].concat([1,1])</p>
 
             </div>
             
@@ -2330,13 +2473,13 @@ that pass the validator function</p>
         </li>
         
         
-        <li id="section-127">
+        <li id="section-136">
             <div class="annotation">
               
               <div class="pilwrap ">
-                <a class="pilcrow" href="#section-127">&#182;</a>
+                <a class="pilcrow" href="#section-136">&#182;</a>
               </div>
-              <p>A global GUID counter for objects</p>
+              <p>一个全局计数器，用与jquery事件模块和缓存模块</p>
 
             </div>
             
@@ -2345,21 +2488,35 @@ that pass the validator function</p>
         </li>
         
         
-        <li id="section-128">
+        <li id="section-137">
             <div class="annotation">
               
               <div class="pilwrap ">
-                <a class="pilcrow" href="#section-128">&#182;</a>
+                <a class="pilcrow" href="#section-137">&#182;</a>
               </div>
-              <p>Bind a function to a context, optionally partially applying any
-arguments.</p>
+              <p>接收一个函数，返回一个总是持有指定上下文的新函数
+proxy(fn,context)===&gt;指定参数fn的上下文始终为参数context
+proxy(context,name)===&gt;参数name为context的属性，指定参数name对应函数的上下文始终为context</p>
 
             </div>
             
             <div class="content"><div class='highlight'><pre>	    proxy: <span class="hljs-function"><span class="hljs-keyword">function</span>(<span class="hljs-params"> fn, context </span>) </span>{
-	        <span class="hljs-keyword">var</span> tmp, args, proxy;
+	        <span class="hljs-keyword">var</span> tmp, args, proxy;</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-138">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-138">&#182;</a>
+              </div>
+              <p>针对以上场景的第二种场景</p>
 
-	        <span class="hljs-keyword">if</span> ( <span class="hljs-keyword">typeof</span> context === <span class="hljs-string">"string"</span> ) {
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>	        <span class="hljs-keyword">if</span> ( <span class="hljs-keyword">typeof</span> context === <span class="hljs-string">"string"</span> ) {
 	            tmp = fn[ context ];
 	            context = fn;
 	            fn = tmp;
@@ -2368,14 +2525,13 @@ arguments.</p>
         </li>
         
         
-        <li id="section-129">
+        <li id="section-139">
             <div class="annotation">
               
               <div class="pilwrap ">
-                <a class="pilcrow" href="#section-129">&#182;</a>
+                <a class="pilcrow" href="#section-139">&#182;</a>
               </div>
-              <p>Quick check to determine if target is callable, in the spec
-this throws a TypeError, but we will just return undefined.</p>
+              <p>确保fn是一个函数</p>
 
             </div>
             
@@ -2386,31 +2542,45 @@ this throws a TypeError, but we will just return undefined.</p>
         </li>
         
         
-        <li id="section-130">
+        <li id="section-140">
             <div class="annotation">
               
               <div class="pilwrap ">
-                <a class="pilcrow" href="#section-130">&#182;</a>
+                <a class="pilcrow" href="#section-140">&#182;</a>
               </div>
-              <p>Simulated bind</p>
+              <p>收集其他的入参</p>
 
             </div>
             
-            <div class="content"><div class='highlight'><pre>	        args = core_slice.call( <span class="hljs-built_in">arguments</span>, <span class="hljs-number">2</span> );
-	        proxy = <span class="hljs-function"><span class="hljs-keyword">function</span>(<span class="hljs-params"></span>) </span>{
+            <div class="content"><div class='highlight'><pre>	        args = core_slice.call( <span class="hljs-built_in">arguments</span>, <span class="hljs-number">2</span> );</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-141">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-141">&#182;</a>
+              </div>
+              <p>创建一个代理函数，在函数中调用原生的fn，并通过apply来指定上下文，并通过闭包获取到之前收集到的参数</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>	        proxy = <span class="hljs-function"><span class="hljs-keyword">function</span>(<span class="hljs-params"></span>) </span>{
 	            <span class="hljs-keyword">return</span> fn.apply( context, args.concat( core_slice.call( <span class="hljs-built_in">arguments</span> ) ) );
 	        };</pre></div></div>
             
         </li>
         
         
-        <li id="section-131">
+        <li id="section-142">
             <div class="annotation">
               
               <div class="pilwrap ">
-                <a class="pilcrow" href="#section-131">&#182;</a>
+                <a class="pilcrow" href="#section-142">&#182;</a>
               </div>
-              <p>Set the guid of unique handler to the same of original handler, so it can be removed</p>
+              <p>将代理函数和原始函数通过guid关联起来，便于移除函数是使用</p>
 
             </div>
             
@@ -2422,14 +2592,13 @@ this throws a TypeError, but we will just return undefined.</p>
         </li>
         
         
-        <li id="section-132">
+        <li id="section-143">
             <div class="annotation">
               
               <div class="pilwrap ">
-                <a class="pilcrow" href="#section-132">&#182;</a>
+                <a class="pilcrow" href="#section-143">&#182;</a>
               </div>
-              <p>Multifunctional method to get and set values of a collection
-The value/s can optionally be executed if it’s a function</p>
+              <p> elems==&gt; 在jq源码中应用场景为this，fn==&gt;函数 ，key==&gt; 属性 ，value==&gt;值，chainable ==&gt;是否可以链式调用 ，emptyGet==&gt; this中没有选中对象的返回值, pass==&gt;是否为原始数据，如果为false，说明value是个函数 </p>
 
             </div>
             
@@ -2442,13 +2611,13 @@ The value/s can optionally be executed if it’s a function</p>
         </li>
         
         
-        <li id="section-133">
+        <li id="section-144">
             <div class="annotation">
               
               <div class="pilwrap ">
-                <a class="pilcrow" href="#section-133">&#182;</a>
+                <a class="pilcrow" href="#section-144">&#182;</a>
               </div>
-              <p>Sets many values</p>
+              <p>如果参数key是对象，则表示要设置多个属性，遍历参数key，遍历调用access方法，设置为可链式调用</p>
 
             </div>
             
@@ -2461,50 +2630,50 @@ The value/s can optionally be executed if it’s a function</p>
         </li>
         
         
-        <li id="section-134">
+        <li id="section-145">
             <div class="annotation">
               
               <div class="pilwrap ">
-                <a class="pilcrow" href="#section-134">&#182;</a>
+                <a class="pilcrow" href="#section-145">&#182;</a>
               </div>
-              <p>Sets one value</p>
+              <p>设置一个属性</p>
 
             </div>
             
-            <div class="content"><div class='highlight'><pre>	        } <span class="hljs-keyword">else</span> <span class="hljs-keyword">if</span> ( value !== <span class="hljs-literal">undefined</span> ) {</pre></div></div>
+            <div class="content"><div class='highlight'><pre>	        } <span class="hljs-keyword">else</span> <span class="hljs-keyword">if</span> ( value !== <span class="hljs-literal">undefined</span> ) {
+	        	
+	            exec = pass === <span class="hljs-literal">undefined</span> &amp;&amp; jQuery.isFunction( value );</pre></div></div>
             
         </li>
         
         
-        <li id="section-135">
+        <li id="section-146">
             <div class="annotation">
               
               <div class="pilwrap ">
-                <a class="pilcrow" href="#section-135">&#182;</a>
+                <a class="pilcrow" href="#section-146">&#182;</a>
               </div>
-              <p>Optionally, function values get executed if exec is true</p>
+              <p>是否要批量执行，主要看fn的实现逻辑</p>
 
             </div>
             
-            <div class="content"><div class='highlight'><pre>	            exec = pass === <span class="hljs-literal">undefined</span> &amp;&amp; jQuery.isFunction( value );
-
-	            <span class="hljs-keyword">if</span> ( bulk ) {</pre></div></div>
+            <div class="content"><div class='highlight'><pre>	            <span class="hljs-keyword">if</span> ( bulk ) {
+	                <span class="hljs-keyword">if</span> ( exec ) {</pre></div></div>
             
         </li>
         
         
-        <li id="section-136">
+        <li id="section-147">
             <div class="annotation">
               
               <div class="pilwrap ">
-                <a class="pilcrow" href="#section-136">&#182;</a>
+                <a class="pilcrow" href="#section-147">&#182;</a>
               </div>
-              <p>Bulk operations only iterate when executing function values</p>
+              <p>执行$(“#id”).html(function(){return value})</p>
 
             </div>
             
-            <div class="content"><div class='highlight'><pre>	                <span class="hljs-keyword">if</span> ( exec ) {
-	                    exec = fn;
+            <div class="content"><div class='highlight'><pre>	                    exec = fn;
 	                    fn = <span class="hljs-function"><span class="hljs-keyword">function</span>(<span class="hljs-params"> elem, key, value </span>) </span>{
 	                        <span class="hljs-keyword">return</span> exec.call( jQuery( elem ), value );
 	                    };</pre></div></div>
@@ -2512,13 +2681,13 @@ The value/s can optionally be executed if it’s a function</p>
         </li>
         
         
-        <li id="section-137">
+        <li id="section-148">
             <div class="annotation">
               
               <div class="pilwrap ">
-                <a class="pilcrow" href="#section-137">&#182;</a>
+                <a class="pilcrow" href="#section-148">&#182;</a>
               </div>
-              <p>Otherwise they run against the entire set</p>
+              <p>fn直接调用整个elems</p>
 
             </div>
             
@@ -2526,9 +2695,22 @@ The value/s can optionally be executed if it’s a function</p>
 	                    fn.call( elems, value );
 	                    fn = <span class="hljs-literal">null</span>;
 	                }
-	            }
+	            }</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-149">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-149">&#182;</a>
+              </div>
+              <p>如果要批量执行fn，则递归循环elems，针对每个elems依次调用fn</p>
 
-	            <span class="hljs-keyword">if</span> ( fn ) {
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>	            <span class="hljs-keyword">if</span> ( fn ) {
 	                <span class="hljs-keyword">for</span> (; i &lt; length; i++ ) {
 	                    fn( elems[i], key, exec ? value.call( elems[i], i, fn( elems[i], key ) ) : value, pass );
 	                }
@@ -2543,43 +2725,67 @@ The value/s can optionally be executed if it’s a function</p>
         </li>
         
         
-        <li id="section-138">
+        <li id="section-150">
             <div class="annotation">
               
               <div class="pilwrap ">
-                <a class="pilcrow" href="#section-138">&#182;</a>
+                <a class="pilcrow" href="#section-150">&#182;</a>
               </div>
-              <p>Gets</p>
+              <p>为get取值，不要链式调用</p>
 
             </div>
             
             <div class="content"><div class='highlight'><pre>	            bulk ?
 	                fn.call( elems ) :
 	                length ? fn( elems[<span class="hljs-number">0</span>], key ) : emptyGet;
-	    },
-
-	    now: <span class="hljs-function"><span class="hljs-keyword">function</span>(<span class="hljs-params"></span>) </span>{
-	        <span class="hljs-keyword">return</span> ( <span class="hljs-keyword">new</span> <span class="hljs-built_in">Date</span>() ).getTime();
-	    }
-	});
-
-	jQuery.ready.promise = <span class="hljs-function"><span class="hljs-keyword">function</span>(<span class="hljs-params"> obj </span>) </span>{
-	    <span class="hljs-keyword">if</span> ( !readyList ) {
-
-	        readyList = jQuery.Deferred();</pre></div></div>
+	    },</pre></div></div>
             
         </li>
         
         
-        <li id="section-139">
+        <li id="section-151">
             <div class="annotation">
               
               <div class="pilwrap ">
-                <a class="pilcrow" href="#section-139">&#182;</a>
+                <a class="pilcrow" href="#section-151">&#182;</a>
               </div>
-              <p>Catch cases where $(document).ready() is called after the browser event has already occurred.
-we once tried to use readyState “interactive” here, but it caused issues like the one
-discovered by ChrisS here: <a href="http://bugs.jquery.com/ticket/12282#comment:15">http://bugs.jquery.com/ticket/12282#comment:15</a></p>
+              <p>当前时间的毫秒显示的简写</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>	    now: <span class="hljs-function"><span class="hljs-keyword">function</span>(<span class="hljs-params"></span>) </span>{
+	        <span class="hljs-keyword">return</span> ( <span class="hljs-keyword">new</span> <span class="hljs-built_in">Date</span>() ).getTime();
+	    }
+	});
+	
+	jQuery.ready.promise = <span class="hljs-function"><span class="hljs-keyword">function</span>(<span class="hljs-params"> obj </span>) </span>{
+	    <span class="hljs-keyword">if</span> ( !readyList ) {</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-152">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-152">&#182;</a>
+              </div>
+              <p>初始化jquery ready回调列表对象readyList</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>	        readyList = jQuery.Deferred();</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-153">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-153">&#182;</a>
+              </div>
+              <p>在document加载完后执行ready</p>
 
             </div>
             
@@ -2588,11 +2794,11 @@ discovered by ChrisS here: <a href="http://bugs.jquery.com/ticket/12282#comment:
         </li>
         
         
-        <li id="section-140">
+        <li id="section-154">
             <div class="annotation">
               
               <div class="pilwrap ">
-                <a class="pilcrow" href="#section-140">&#182;</a>
+                <a class="pilcrow" href="#section-154">&#182;</a>
               </div>
               <p>Handle it asynchronously to allow scripts the opportunity to delay ready</p>
 
@@ -2603,13 +2809,13 @@ discovered by ChrisS here: <a href="http://bugs.jquery.com/ticket/12282#comment:
         </li>
         
         
-        <li id="section-141">
+        <li id="section-155">
             <div class="annotation">
               
               <div class="pilwrap ">
-                <a class="pilcrow" href="#section-141">&#182;</a>
+                <a class="pilcrow" href="#section-155">&#182;</a>
               </div>
-              <p>Standards-based browsers support DOMContentLoaded</p>
+              <p>标准浏览器支持DOMContentLoaded事件，使用时间处理</p>
 
             </div>
             
@@ -2618,13 +2824,13 @@ discovered by ChrisS here: <a href="http://bugs.jquery.com/ticket/12282#comment:
         </li>
         
         
-        <li id="section-142">
+        <li id="section-156">
             <div class="annotation">
               
               <div class="pilwrap ">
-                <a class="pilcrow" href="#section-142">&#182;</a>
+                <a class="pilcrow" href="#section-156">&#182;</a>
               </div>
-              <p>Use the handy event callback</p>
+              <p>优先绑定DOMContentLoaded，不需要等所有静态资源都加载</p>
 
             </div>
             
@@ -2633,13 +2839,13 @@ discovered by ChrisS here: <a href="http://bugs.jquery.com/ticket/12282#comment:
         </li>
         
         
-        <li id="section-143">
+        <li id="section-157">
             <div class="annotation">
               
               <div class="pilwrap ">
-                <a class="pilcrow" href="#section-143">&#182;</a>
+                <a class="pilcrow" href="#section-157">&#182;</a>
               </div>
-              <p>A fallback to window.onload, that will always work</p>
+              <p>回退到window.onload事件绑定，所有的浏览器都支持</p>
 
             </div>
             
@@ -2648,11 +2854,11 @@ discovered by ChrisS here: <a href="http://bugs.jquery.com/ticket/12282#comment:
         </li>
         
         
-        <li id="section-144">
+        <li id="section-158">
             <div class="annotation">
               
               <div class="pilwrap ">
-                <a class="pilcrow" href="#section-144">&#182;</a>
+                <a class="pilcrow" href="#section-158">&#182;</a>
               </div>
               <p>If IE event model is used</p>
 
@@ -2663,13 +2869,13 @@ discovered by ChrisS here: <a href="http://bugs.jquery.com/ticket/12282#comment:
         </li>
         
         
-        <li id="section-145">
+        <li id="section-159">
             <div class="annotation">
               
               <div class="pilwrap ">
-                <a class="pilcrow" href="#section-145">&#182;</a>
+                <a class="pilcrow" href="#section-159">&#182;</a>
               </div>
-              <p>Ensure firing before onload, maybe late but safe also for iframes</p>
+              <p>优先绑定onreadystatechange，不需要等所有静态资源都加载</p>
 
             </div>
             
@@ -2678,13 +2884,13 @@ discovered by ChrisS here: <a href="http://bugs.jquery.com/ticket/12282#comment:
         </li>
         
         
-        <li id="section-146">
+        <li id="section-160">
             <div class="annotation">
               
               <div class="pilwrap ">
-                <a class="pilcrow" href="#section-146">&#182;</a>
+                <a class="pilcrow" href="#section-160">&#182;</a>
               </div>
-              <p>A fallback to window.onload, that will always work</p>
+              <p>回退到window.onload事件绑定，所有的浏览器都支持</p>
 
             </div>
             
@@ -2693,14 +2899,14 @@ discovered by ChrisS here: <a href="http://bugs.jquery.com/ticket/12282#comment:
         </li>
         
         
-        <li id="section-147">
+        <li id="section-161">
             <div class="annotation">
               
               <div class="pilwrap ">
-                <a class="pilcrow" href="#section-147">&#182;</a>
+                <a class="pilcrow" href="#section-161">&#182;</a>
               </div>
-              <p>If IE and not a frame
-continually check to see if the document is ready</p>
+              <p>如果IE并且不是一个frame，针对ie9一下的版本
+不断地检查，看是否该文件已准备就绪</p>
 
             </div>
             
@@ -2719,14 +2925,13 @@ continually check to see if the document is ready</p>
         </li>
         
         
-        <li id="section-148">
+        <li id="section-162">
             <div class="annotation">
               
               <div class="pilwrap ">
-                <a class="pilcrow" href="#section-148">&#182;</a>
+                <a class="pilcrow" href="#section-162">&#182;</a>
               </div>
-              <p>Use the trick by Diego Perini
-<a href="http://javascript.nwbox.com/IEContentLoaded/">http://javascript.nwbox.com/IEContentLoaded/</a></p>
+              <p><a href="http://javascript.nwbox.com/IEContentLoaded/">http://javascript.nwbox.com/IEContentLoaded/</a></p>
 
             </div>
             
@@ -2738,13 +2943,13 @@ continually check to see if the document is ready</p>
         </li>
         
         
-        <li id="section-149">
+        <li id="section-163">
             <div class="annotation">
               
               <div class="pilwrap ">
-                <a class="pilcrow" href="#section-149">&#182;</a>
+                <a class="pilcrow" href="#section-163">&#182;</a>
               </div>
-              <p>and execute any waiting functions</p>
+              <p>执行回调函数</p>
 
             </div>
             
@@ -2760,11 +2965,11 @@ continually check to see if the document is ready</p>
         </li>
         
         
-        <li id="section-150">
+        <li id="section-164">
             <div class="annotation">
               
               <div class="pilwrap ">
-                <a class="pilcrow" href="#section-150">&#182;</a>
+                <a class="pilcrow" href="#section-164">&#182;</a>
               </div>
               <p>初始化class2type变量，供jquery.type使用</p>
 
@@ -2777,13 +2982,13 @@ continually check to see if the document is ready</p>
         </li>
         
         
-        <li id="section-151">
+        <li id="section-165">
             <div class="annotation">
               
               <div class="pilwrap ">
-                <a class="pilcrow" href="#section-151">&#182;</a>
+                <a class="pilcrow" href="#section-165">&#182;</a>
               </div>
-              <p>All jQuery objects should point back to these</p>
+              <p>初始化jquery查找上下文，同时触发document的ready事件 </p>
 
             </div>
             
@@ -2792,13 +2997,13 @@ continually check to see if the document is ready</p>
         </li>
         
         
-        <li id="section-152">
+        <li id="section-166">
             <div class="annotation">
               
               <div class="pilwrap ">
-                <a class="pilcrow" href="#section-152">&#182;</a>
+                <a class="pilcrow" href="#section-166">&#182;</a>
               </div>
-              <p>Cleanup functions for the document ready method</p>
+              <p>清理回调函数，避免二次触发</p>
 
             </div>
             
@@ -2809,81 +3014,12 @@ continually check to see if the document is ready</p>
 	  };
 
 	} <span class="hljs-keyword">else</span> <span class="hljs-keyword">if</span> ( <span class="hljs-built_in">document</span>.attachEvent ) {
-	  DOMContentLoaded = <span class="hljs-function"><span class="hljs-keyword">function</span>(<span class="hljs-params"></span>) </span>{</pre></div></div>
-            
-        </li>
-        
-        
-        <li id="section-153">
-            <div class="annotation">
-              
-              <div class="pilwrap ">
-                <a class="pilcrow" href="#section-153">&#182;</a>
-              </div>
-              <p>Make sure body exists, at least, in case IE gets a little overzealous (ticket #5443).</p>
-
-            </div>
-            
-            <div class="content"><div class='highlight'><pre>	    <span class="hljs-keyword">if</span> ( <span class="hljs-built_in">document</span>.readyState === <span class="hljs-string">"complete"</span> ) {
+	  DOMContentLoaded = <span class="hljs-function"><span class="hljs-keyword">function</span>(<span class="hljs-params"></span>) </span>{
+	    <span class="hljs-keyword">if</span> ( <span class="hljs-built_in">document</span>.readyState === <span class="hljs-string">"complete"</span> ) {
 	      <span class="hljs-built_in">document</span>.detachEvent( <span class="hljs-string">"onreadystatechange"</span>, DOMContentLoaded );
 	      jQuery.ready();
 	    }
 	  };
-	}</pre></div></div>
-            
-        </li>
-        
-        
-        <li id="section-154">
-            <div class="annotation">
-              
-              <div class="pilwrap ">
-                <a class="pilcrow" href="#section-154">&#182;</a>
-              </div>
-              <p>The DOM ready check for Internet Explorer</p>
-
-            </div>
-            
-            <div class="content"><div class='highlight'><pre>	<span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">doScrollCheck</span>(<span class="hljs-params"></span>) </span>{
-	  <span class="hljs-keyword">if</span> ( jQuery.isReady ) {
-	    <span class="hljs-keyword">return</span>;
-	  }</pre></div></div>
-            
-        </li>
-        
-        
-        <li id="section-155">
-            <div class="annotation">
-              
-              <div class="pilwrap ">
-                <a class="pilcrow" href="#section-155">&#182;</a>
-              </div>
-              <p>If IE is used, use the trick by Diego Perini
-<a href="http://javascript.nwbox.com/IEContentLoaded/">http://javascript.nwbox.com/IEContentLoaded/</a></p>
-
-            </div>
-            
-            <div class="content"><div class='highlight'><pre>	  <span class="hljs-keyword">try</span> {
-	    <span class="hljs-built_in">document</span>.documentElement.doScroll(<span class="hljs-string">"left"</span>);
-	  } <span class="hljs-keyword">catch</span>(e) {
-	    setTimeout( doScrollCheck, <span class="hljs-number">1</span> );
-	    <span class="hljs-keyword">return</span>;
-	  }</pre></div></div>
-            
-        </li>
-        
-        
-        <li id="section-156">
-            <div class="annotation">
-              
-              <div class="pilwrap ">
-                <a class="pilcrow" href="#section-156">&#182;</a>
-              </div>
-              <p>and execute any waiting functions</p>
-
-            </div>
-            
-            <div class="content"><div class='highlight'><pre>	  jQuery.ready();
 	}
 
 	<span class="hljs-keyword">return</span> jQuery;

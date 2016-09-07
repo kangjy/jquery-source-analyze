@@ -1,0 +1,1166 @@
+<!DOCTYPE html>
+
+<html>
+<head>
+  <title>02-deferred.js</title>
+  <meta http-equiv="content-type" content="text/html; charset=UTF-8">
+  <meta name="viewport" content="width=device-width, target-densitydpi=160dpi, initial-scale=1.0; maximum-scale=1.0; user-scalable=0;">
+  <link rel="stylesheet" media="all" href="docco.css" />
+</head>
+<body>
+  <div id="container">
+    <div id="background"></div>
+    
+      <ul id="jump_to">
+        <li>
+          <a class="large" href="javascript:void(0);">Jump To &hellip;</a>
+          <a class="small" href="javascript:void(0);">+</a>
+          <div id="jump_wrapper">
+          <div id="jump_page_wrapper">
+            <div id="jump_page">
+              
+                
+                <a class="source" href="01-core.html">
+                  01-core.js
+                </a>
+              
+                
+                <a class="source" href="02-deferred.html">
+                  02-deferred.js
+                </a>
+              
+            </div>
+          </div>
+        </li>
+      </ul>
+    
+    <ul class="sections">
+        
+          <li id="title">
+              <div class="annotation">
+                  <h1>02-deferred.js</h1>
+              </div>
+          </li>
+        
+        
+        
+        <li id="section-1">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-1">&#182;</a>
+              </div>
+              <p>jquery 1.8.3 源码 907—1242行</p>
+
+            </div>
+            
+        </li>
+        
+        
+        <li id="section-2">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-2">&#182;</a>
+              </div>
+              <p>缓存Callbacks中options转换成的缓存对象，属性为标记字符串，属性值为true</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre><span class="hljs-keyword">var</span> optionsCache = {};</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-3">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-3">&#182;</a>
+              </div>
+              <p>将字符串格式的标记转换成对象格式的标记
+createOptions(‘unique memory’)==&gt;{once:true,memory:true}</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre><span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">createOptions</span>(<span class="hljs-params"> options </span>) </span>{
+        <span class="hljs-keyword">var</span> object = optionsCache[ options ] = {};
+        jQuery.each( options.split( core_rspace ), <span class="hljs-function"><span class="hljs-keyword">function</span>(<span class="hljs-params"> _, flag </span>) </span>{
+                object[ flag ] = <span class="hljs-literal">true</span>;
+        });
+        <span class="hljs-keyword">return</span> object;
+}</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-4">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-4">&#182;</a>
+              </div>
+              <p>根据不同的标记组合创建一个回调函数俩别
+默认回调函数列表的行为类似于事件监听函数，能够被触发多次，options为以下可选值的组合或者单个</p>
+
+            </div>
+            
+        </li>
+        
+        
+        <li id="section-5">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-5">&#182;</a>
+              </div>
+              <p>once==&gt; 确保回调函数只调用1次 即fire只会执行一次
+memory==&gt;记录上一次触发回调函数的列表，之后添加的回调函数都将用记录的参数值立即调用<br/>
+unique==&gt; 确保一个回调函数只能被添加一次<br>stopOnFalse==&gt;当某个回调函数返回false时中断执行  </p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>
+jQuery.Callbacks = <span class="hljs-function"><span class="hljs-keyword">function</span>(<span class="hljs-params"> options </span>) </span>{</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-6">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-6">&#182;</a>
+              </div>
+              <p>如果为字符串，则先尝试从缓存对象中获取，如果获取不到，则调用工具函数createOptions做转换</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>        options = <span class="hljs-keyword">typeof</span> options === <span class="hljs-string">"string"</span> ?
+                ( optionsCache[ options ] || createOptions( options ) ) :
+                jQuery.extend( {}, options );
+
+        <span class="hljs-keyword">var</span> <span class="hljs-comment">// 最后触发的值(for non-forgettable lists)</span>
+                memory,</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-7">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-7">&#182;</a>
+              </div>
+              <p>标识是否已经执行过回调函数</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>                fired,</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-8">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-8">&#182;</a>
+              </div>
+              <p>标识回调函数是否在执行中</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>                firing,</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-9">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-9">&#182;</a>
+              </div>
+              <p>待执行的第一个回调函数下标</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>                firingStart,</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-10">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-10">&#182;</a>
+              </div>
+              <p>待执行的最后一个回调函数下标</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>                firingLength,</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-11">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-11">&#182;</a>
+              </div>
+              <p>当前正在执行回调函数的下标</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>                firingIndex,</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-12">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-12">&#182;</a>
+              </div>
+              <p>存放回调函数的数组</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>                list = [],</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-13">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-13">&#182;</a>
+              </div>
+              <p>在可重复触发，正在执行的列表上，重复触发时，将上下文和参数放在数组中。如果once为true，则stack为空数组</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>                stack = !options.once &amp;&amp; [],</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-14">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-14">&#182;</a>
+              </div>
+              <p>实际触发回调函数的工具函数，data==&gt;data[0] 上下文 data[1] 参数</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>                fire = <span class="hljs-function"><span class="hljs-keyword">function</span>(<span class="hljs-params"> data </span>) </span>{</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-15">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-15">&#182;</a>
+              </div>
+              <p>如果设置了memory标识，则该变量存储本次参数，供下次调用</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>                        memory = options.memory &amp;&amp; data;
+                        fired = <span class="hljs-literal">true</span>;
+                        firingIndex = firingStart || <span class="hljs-number">0</span>;
+                        firingStart = <span class="hljs-number">0</span>;
+                        firingLength = list.length;
+                        firing = <span class="hljs-literal">true</span>;
+                        <span class="hljs-keyword">for</span> ( ; list &amp;&amp; firingIndex &lt; firingLength; firingIndex++ ) {</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-16">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-16">&#182;</a>
+              </div>
+              <p>如果设置了stopOnFalse，并且某个回调函数返回false，则停止后续回调列表调用</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>                        		<span class="hljs-keyword">if</span> ( list[ firingIndex ].apply( data[ <span class="hljs-number">0</span> ], data[ <span class="hljs-number">1</span> ] ) === <span class="hljs-literal">false</span> &amp;&amp; options.stopOnFalse ) {
+                                        memory = <span class="hljs-literal">false</span>; <span class="hljs-comment">// To prevent further calls using add</span>
+                                        <span class="hljs-keyword">break</span>;
+                                }
+                        }
+                        firing = <span class="hljs-literal">false</span>;
+                        <span class="hljs-keyword">if</span> ( list ) {
+                                <span class="hljs-keyword">if</span> ( stack ) {</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-17">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-17">&#182;</a>
+              </div>
+              <p>不是once，并且执行列表上还有重复触发的函数，则依次触发</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>                                        <span class="hljs-keyword">if</span> ( stack.length ) {
+                                                fire( stack.shift() );
+                                        }
+                                } <span class="hljs-keyword">else</span> <span class="hljs-keyword">if</span> ( memory ) {</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-18">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-18">&#182;</a>
+              </div>
+              <p>如果为momory模式，则清空数组，可使后续添加的回调函数立即执行</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>                                        list = [];
+                                } <span class="hljs-keyword">else</span> {</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-19">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-19">&#182;</a>
+              </div>
+              <p>为once模式，只执行一次</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>                                        self.disable();
+                                }
+                        }
+                },</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-20">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-20">&#182;</a>
+              </div>
+              <p>这才是callbacks真身</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>                self = {</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-21">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-21">&#182;</a>
+              </div>
+              <p>添加一个或一组回调函数到函数列表里</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>                        add: <span class="hljs-function"><span class="hljs-keyword">function</span>(<span class="hljs-params"></span>) </span>{</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-22">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-22">&#182;</a>
+              </div>
+              <p>这儿判断是为了disable后，调用该函数没作用</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>                                <span class="hljs-keyword">if</span> ( list ) {</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-23">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-23">&#182;</a>
+              </div>
+              <p>备份数组的长度，</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>                                        <span class="hljs-keyword">var</span> start = list.length;</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-24">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-24">&#182;</a>
+              </div>
+              <p>调用匿名函数添加列表，之前这个函数作为一个工具函数来处理，这样处理，代码逻辑更好理解</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>                                        (<span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">add</span>(<span class="hljs-params"> args </span>) </span>{
+                                                jQuery.each( args, <span class="hljs-function"><span class="hljs-keyword">function</span>(<span class="hljs-params"> _, arg </span>) </span>{
+                                                        <span class="hljs-keyword">var</span> type = jQuery.type( arg );
+                                                        <span class="hljs-keyword">if</span> ( type === <span class="hljs-string">"function"</span> ) {
+                                                                <span class="hljs-keyword">if</span> ( !options.unique || !self.has( arg ) ) {
+                                                                        list.push( arg );
+                                                                }
+                                                        } <span class="hljs-keyword">else</span> <span class="hljs-keyword">if</span> ( arg &amp;&amp; arg.length &amp;&amp; type !== <span class="hljs-string">"string"</span> ) {</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-25">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-25">&#182;</a>
+              </div>
+              <p>递归添加函数列表</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>                                                                add( arg );
+                                                        }
+                                                });
+                                        })( <span class="hljs-built_in">arguments</span> );</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-26">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-26">&#182;</a>
+              </div>
+              <p>如果回调函数正在执行中，则修正结束的下标，使得新添加的函数也能执行</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>                                        <span class="hljs-keyword">if</span> ( firing ) {
+                                                firingLength = list.length;</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-27">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-27">&#182;</a>
+              </div>
+              <p>如果在momory模式下，并且已经执行完了，修正其实下标，然后直接调用fire执行刚添加的回调函数</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>                                        } <span class="hljs-keyword">else</span> <span class="hljs-keyword">if</span> ( memory ) {
+                                                firingStart = start;
+                                                fire( memory );
+                                        }
+                                }
+                                <span class="hljs-keyword">return</span> <span class="hljs-keyword">this</span>;
+                        },</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-28">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-28">&#182;</a>
+              </div>
+              <p>从回调函数列表中移除一个或者一组回调函数</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>                        remove: <span class="hljs-function"><span class="hljs-keyword">function</span>(<span class="hljs-params"></span>) </span>{
+                                <span class="hljs-keyword">if</span> ( list ) {
+                                        jQuery.each( <span class="hljs-built_in">arguments</span>, <span class="hljs-function"><span class="hljs-keyword">function</span>(<span class="hljs-params"> _, arg </span>) </span>{
+                                                <span class="hljs-keyword">var</span> index;
+                                                <span class="hljs-keyword">while</span>( ( index = jQuery.inArray( arg, list, index ) ) &gt; <span class="hljs-number">-1</span> ) {
+                                                        list.splice( index, <span class="hljs-number">1</span> );</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-29">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-29">&#182;</a>
+              </div>
+              <p>如果回调函数正在执行</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>                                                        <span class="hljs-keyword">if</span> ( firing ) {</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-30">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-30">&#182;</a>
+              </div>
+              <p>移除前让长度减一，避免找不到最后一个元素</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>                                                                <span class="hljs-keyword">if</span> ( index &lt;= firingLength ) {
+                                                                        firingLength--;
+                                                                }</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-31">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-31">&#182;</a>
+              </div>
+              <p>如果待移除的下标小于正在执行的下标，则修正firingIndex，确保不会漏执行掉回调函数</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>                                                                <span class="hljs-keyword">if</span> ( index &lt;= firingIndex ) {
+                                                                        firingIndex--;
+                                                                }
+                                                        }
+                                                }
+                                        });
+                                }
+                                <span class="hljs-keyword">return</span> <span class="hljs-keyword">this</span>;
+                        },</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-32">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-32">&#182;</a>
+              </div>
+              <p>从回调函数列表中移除一个回调函数</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>                        has: <span class="hljs-function"><span class="hljs-keyword">function</span>(<span class="hljs-params"> fn </span>) </span>{
+                                <span class="hljs-keyword">return</span> jQuery.inArray( fn, list ) &gt; <span class="hljs-number">-1</span>;
+                        },</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-33">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-33">&#182;</a>
+              </div>
+              <p>移除回调函数列表中的所有回调函数</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>                        empty: <span class="hljs-function"><span class="hljs-keyword">function</span>(<span class="hljs-params"></span>) </span>{
+                                list = [];
+                                <span class="hljs-keyword">return</span> <span class="hljs-keyword">this</span>;
+                        },</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-34">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-34">&#182;</a>
+              </div>
+              <p>禁用回调函数列表，使它不再做任何事</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>                        disable: <span class="hljs-function"><span class="hljs-keyword">function</span>(<span class="hljs-params"></span>) </span>{
+                                list = stack = memory = <span class="hljs-literal">undefined</span>;
+                                <span class="hljs-keyword">return</span> <span class="hljs-keyword">this</span>;
+                        },</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-35">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-35">&#182;</a>
+              </div>
+              <p>返回回调列表是否被禁用</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>                        disabled: <span class="hljs-function"><span class="hljs-keyword">function</span>(<span class="hljs-params"></span>) </span>{
+                                <span class="hljs-keyword">return</span> !list;
+                        },</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-36">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-36">&#182;</a>
+              </div>
+              <p>在非memory直接禁用，所以该lock是针对memory模式的，lock阻止fire内部fire的场景</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>                        lock: <span class="hljs-function"><span class="hljs-keyword">function</span>(<span class="hljs-params"></span>) </span>{
+                                stack = <span class="hljs-literal">undefined</span>;
+                                <span class="hljs-keyword">if</span> ( !memory ) {
+                                        self.disable();
+                                }
+                                <span class="hljs-keyword">return</span> <span class="hljs-keyword">this</span>;
+                        },</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-37">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-37">&#182;</a>
+              </div>
+              <p>判断回调函数是否锁定</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>                        locked: <span class="hljs-function"><span class="hljs-keyword">function</span>(<span class="hljs-params"></span>) </span>{
+                                <span class="hljs-keyword">return</span> !stack;
+                        },</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-38">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-38">&#182;</a>
+              </div>
+              <p>使用知道的上下文和参数触发回调函数列表</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>                        fireWith: <span class="hljs-function"><span class="hljs-keyword">function</span>(<span class="hljs-params"> context, args </span>) </span>{
+                                args = args || [];
+                                args = [ context, args.slice ? args.slice() : args ];</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-39">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-39">&#182;</a>
+              </div>
+              <p>取保没有执行过，或者stack部位空的情况</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>                                <span class="hljs-keyword">if</span> ( list &amp;&amp; ( !fired || stack ) ) {</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-40">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-40">&#182;</a>
+              </div>
+              <p>正在执行的情况下触发该情况，则说明回调函数中包含了触发的函数，直接把压栈，待执行完递归fire</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>                                        <span class="hljs-keyword">if</span> ( firing ) {
+                                                stack.push( args );
+                                        } <span class="hljs-keyword">else</span> {</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-41">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-41">&#182;</a>
+              </div>
+              <p>处理stack里面的fire</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>                                                fire( args );
+                                        }
+                                }
+                                <span class="hljs-keyword">return</span> <span class="hljs-keyword">this</span>;
+                        },</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-42">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-42">&#182;</a>
+              </div>
+              <p>简化调用入参，符合面向对象的接口隔离原则。</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>                        fire: <span class="hljs-function"><span class="hljs-keyword">function</span>(<span class="hljs-params"></span>) </span>{
+                                self.fireWith( <span class="hljs-keyword">this</span>, <span class="hljs-built_in">arguments</span> );
+                                <span class="hljs-keyword">return</span> <span class="hljs-keyword">this</span>;
+                        },</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-43">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-43">&#182;</a>
+              </div>
+              <p>返回该回调函数列表是否已经执行</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>                        fired: <span class="hljs-function"><span class="hljs-keyword">function</span>(<span class="hljs-params"></span>) </span>{
+                                <span class="hljs-keyword">return</span> !!fired;
+                        }
+                };
+
+        <span class="hljs-keyword">return</span> self;
+};
+jQuery.extend({
+
+    Deferred: <span class="hljs-function"><span class="hljs-keyword">function</span>(<span class="hljs-params"> func </span>) </span>{
+            <span class="hljs-keyword">var</span> tuples = [</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-44">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-44">&#182;</a>
+              </div>
+              <p>action, add listener, listener list, final state</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>                            [ <span class="hljs-string">"resolve"</span>, <span class="hljs-string">"done"</span>, jQuery.Callbacks(<span class="hljs-string">"once memory"</span>), <span class="hljs-string">"resolved"</span> ],
+                            [ <span class="hljs-string">"reject"</span>, <span class="hljs-string">"fail"</span>, jQuery.Callbacks(<span class="hljs-string">"once memory"</span>), <span class="hljs-string">"rejected"</span> ],
+                            [ <span class="hljs-string">"notify"</span>, <span class="hljs-string">"progress"</span>, jQuery.Callbacks(<span class="hljs-string">"memory"</span>) ]
+                    ],
+                    state = <span class="hljs-string">"pending"</span>,
+                    promise = {
+                            state: <span class="hljs-function"><span class="hljs-keyword">function</span>(<span class="hljs-params"></span>) </span>{
+                                    <span class="hljs-keyword">return</span> state;
+                            },
+                            always: <span class="hljs-function"><span class="hljs-keyword">function</span>(<span class="hljs-params"></span>) </span>{
+                                    deferred.done( <span class="hljs-built_in">arguments</span> ).fail( <span class="hljs-built_in">arguments</span> );
+                                    <span class="hljs-keyword">return</span> <span class="hljs-keyword">this</span>;
+                            },
+                            then: <span class="hljs-function"><span class="hljs-keyword">function</span>(<span class="hljs-params"> <span class="hljs-comment">/* fnDone, fnFail, fnProgress */</span> </span>) </span>{
+                                    <span class="hljs-keyword">var</span> fns = <span class="hljs-built_in">arguments</span>;
+                                    <span class="hljs-keyword">return</span> jQuery.Deferred(<span class="hljs-function"><span class="hljs-keyword">function</span>(<span class="hljs-params"> newDefer </span>) </span>{
+                                            jQuery.each( tuples, <span class="hljs-function"><span class="hljs-keyword">function</span>(<span class="hljs-params"> i, tuple </span>) </span>{
+                                                    <span class="hljs-keyword">var</span> action = tuple[ <span class="hljs-number">0</span> ],
+                                                            fn = fns[ i ];</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-45">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-45">&#182;</a>
+              </div>
+              <p>deferred[ done | fail | progress ] for forwarding actions to newDefer</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>                                                    deferred[ tuple[<span class="hljs-number">1</span>] ]( jQuery.isFunction( fn ) ?
+                                                            <span class="hljs-function"><span class="hljs-keyword">function</span>(<span class="hljs-params"></span>) </span>{
+                                                                    <span class="hljs-keyword">var</span> returned = fn.apply( <span class="hljs-keyword">this</span>, <span class="hljs-built_in">arguments</span> );
+                                                                    <span class="hljs-keyword">if</span> ( returned &amp;&amp; jQuery.isFunction( returned.promise ) ) {
+                                                                            returned.promise()
+                                                                                    .done( newDefer.resolve )
+                                                                                    .fail( newDefer.reject )
+                                                                                    .progress( newDefer.notify );
+                                                                    } <span class="hljs-keyword">else</span> {
+                                                                            newDefer[ action + <span class="hljs-string">"With"</span> ]( <span class="hljs-keyword">this</span> === deferred ? newDefer : <span class="hljs-keyword">this</span>, [ returned ] );
+                                                                    }
+                                                            } :
+                                                            newDefer[ action ]
+                                                    );
+                                            });
+                                            fns = <span class="hljs-literal">null</span>;
+                                    }).promise();
+                            },</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-46">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-46">&#182;</a>
+              </div>
+              <p>Get a promise for this deferred
+If obj is provided, the promise aspect is added to the object</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>                            promise: <span class="hljs-function"><span class="hljs-keyword">function</span>(<span class="hljs-params"> obj </span>) </span>{
+                                    <span class="hljs-keyword">return</span> obj != <span class="hljs-literal">null</span> ? jQuery.extend( obj, promise ) : promise;
+                            }
+                    },
+                    deferred = {};</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-47">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-47">&#182;</a>
+              </div>
+              <p>Keep pipe for back-compat</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>            promise.pipe = promise.then;</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-48">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-48">&#182;</a>
+              </div>
+              <p>Add list-specific methods</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>            jQuery.each( tuples, <span class="hljs-function"><span class="hljs-keyword">function</span>(<span class="hljs-params"> i, tuple </span>) </span>{
+                    <span class="hljs-keyword">var</span> list = tuple[ <span class="hljs-number">2</span> ],
+                            stateString = tuple[ <span class="hljs-number">3</span> ];</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-49">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-49">&#182;</a>
+              </div>
+              <p>promise[ done | fail | progress ] = list.add</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>                    promise[ tuple[<span class="hljs-number">1</span>] ] = list.add;</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-50">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-50">&#182;</a>
+              </div>
+              <p>Handle state</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>                    <span class="hljs-keyword">if</span> ( stateString ) {
+                            list.add(<span class="hljs-function"><span class="hljs-keyword">function</span>(<span class="hljs-params"></span>) </span>{</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-51">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-51">&#182;</a>
+              </div>
+              <p>state = [ resolved | rejected ]</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>                                    state = stateString;</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-52">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-52">&#182;</a>
+              </div>
+              <p>[ reject_list | resolve_list ].disable; progress_list.lock</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>                            }, tuples[ i ^ <span class="hljs-number">1</span> ][ <span class="hljs-number">2</span> ].disable, tuples[ <span class="hljs-number">2</span> ][ <span class="hljs-number">2</span> ].lock );
+                    }</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-53">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-53">&#182;</a>
+              </div>
+              <p>deferred[ resolve | reject | notify ] = list.fire</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>                    deferred[ tuple[<span class="hljs-number">0</span>] ] = list.fire;
+                    deferred[ tuple[<span class="hljs-number">0</span>] + <span class="hljs-string">"With"</span> ] = list.fireWith;
+            });</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-54">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-54">&#182;</a>
+              </div>
+              <p>Make the deferred a promise</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>            promise.promise( deferred );</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-55">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-55">&#182;</a>
+              </div>
+              <p>Call given func if any</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>            <span class="hljs-keyword">if</span> ( func ) {
+                    func.call( deferred, deferred );
+            }</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-56">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-56">&#182;</a>
+              </div>
+              <p>All done!</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>            <span class="hljs-keyword">return</span> deferred;
+    },</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-57">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-57">&#182;</a>
+              </div>
+              <p>Deferred helper</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>    when: <span class="hljs-function"><span class="hljs-keyword">function</span>(<span class="hljs-params"> subordinate <span class="hljs-comment">/* , ..., subordinateN */</span> </span>) </span>{
+            <span class="hljs-keyword">var</span> i = <span class="hljs-number">0</span>,
+                    resolveValues = core_slice.call( <span class="hljs-built_in">arguments</span> ),
+                    length = resolveValues.length,</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-58">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-58">&#182;</a>
+              </div>
+              <p>the count of uncompleted subordinates</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>                    remaining = length !== <span class="hljs-number">1</span> || ( subordinate &amp;&amp; jQuery.isFunction( subordinate.promise ) ) ? length : <span class="hljs-number">0</span>,</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-59">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-59">&#182;</a>
+              </div>
+              <p>the master Deferred. If resolveValues consist of only a single Deferred, just use that.</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>                    deferred = remaining === <span class="hljs-number">1</span> ? subordinate : jQuery.Deferred(),</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-60">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-60">&#182;</a>
+              </div>
+              <p>Update function for both resolve and progress values</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>                    updateFunc = <span class="hljs-function"><span class="hljs-keyword">function</span>(<span class="hljs-params"> i, contexts, values </span>) </span>{
+                            <span class="hljs-keyword">return</span> <span class="hljs-function"><span class="hljs-keyword">function</span>(<span class="hljs-params"> value </span>) </span>{
+                                    contexts[ i ] = <span class="hljs-keyword">this</span>;
+                                    values[ i ] = <span class="hljs-built_in">arguments</span>.length &gt; <span class="hljs-number">1</span> ? core_slice.call( <span class="hljs-built_in">arguments</span> ) : value;
+                                    <span class="hljs-keyword">if</span>( values === progressValues ) {
+                                            deferred.notifyWith( contexts, values );
+                                    } <span class="hljs-keyword">else</span> <span class="hljs-keyword">if</span> ( !( --remaining ) ) {
+                                            deferred.resolveWith( contexts, values );
+                                    }
+                            };
+                    },
+
+                    progressValues, progressContexts, resolveContexts;</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-61">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-61">&#182;</a>
+              </div>
+              <p>add listeners to Deferred subordinates; treat others as resolved</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>            <span class="hljs-keyword">if</span> ( length &gt; <span class="hljs-number">1</span> ) {
+                    progressValues = <span class="hljs-keyword">new</span> <span class="hljs-built_in">Array</span>( length );
+                    progressContexts = <span class="hljs-keyword">new</span> <span class="hljs-built_in">Array</span>( length );
+                    resolveContexts = <span class="hljs-keyword">new</span> <span class="hljs-built_in">Array</span>( length );
+                    <span class="hljs-keyword">for</span> ( ; i &lt; length; i++ ) {
+                            <span class="hljs-keyword">if</span> ( resolveValues[ i ] &amp;&amp; jQuery.isFunction( resolveValues[ i ].promise ) ) {
+                                    resolveValues[ i ].promise()
+                                            .done( updateFunc( i, resolveContexts, resolveValues ) )
+                                            .fail( deferred.reject )
+                                            .progress( updateFunc( i, progressContexts, progressValues ) );
+                            } <span class="hljs-keyword">else</span> {
+                                    --remaining;
+                            }
+                    }
+            }</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-62">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-62">&#182;</a>
+              </div>
+              <p>if we’re not waiting on anything, resolve the master</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>            <span class="hljs-keyword">if</span> ( !remaining ) {
+                    deferred.resolveWith( resolveContexts, resolveValues );
+            }
+
+            <span class="hljs-keyword">return</span> deferred.promise();
+    }
+});</pre></div></div>
+            
+        </li>
+        
+    </ul>
+  </div>
+</body>
+</html>

@@ -12,12 +12,6 @@
 //     Date: Tue Nov 13 2012 08:20:33 GMT-0500 (Eastern Standard Time)
 
 // ### 第一章: 框架核心
-// ----------
-
-
-
-
-
 
 // 传入window和undefined可以减少查找作用链，同时在压缩时可优化变量名
 (function( window, undefined ) {
@@ -490,7 +484,7 @@ var
 	        }
 	        return true;
 	    },
-
+	    //	接收一个字符串，抛出一个错误异常，开发插件可覆盖这个方法，来显示更多的错误信息
 	    error: function( msg ) {
 	        throw new Error( msg );
 	    },
@@ -568,7 +562,7 @@ var
 	        }
 	        return xml;
 	    },
-
+	    // 空函数，可以作为回调函数的默认值
 	    noop: function() {},
 
 	    // 全局作用域执行javascript代码
@@ -591,11 +585,12 @@ var
 	        return elem.nodeName && elem.nodeName.toLowerCase() === name.toLowerCase();
 	    },
 
-	    // args is for internal usage only
+	    // 静态方法each是一个通用的遍历迭代的方法，用于遍历数组和类数组对象，obj==>待遍历的对象，callback==>回调函数，数组每个元素都执行，args==>该参数会传递给回调函数
 	    each: function( obj, callback, args ) {
 	        var name,
 	            i = 0,
 	            length = obj.length,
+	            // 判断obj是对象还是数组
 	            isObj = length === undefined || jQuery.isFunction( obj );
 
 	        if ( args ) {
@@ -613,7 +608,7 @@ var
 	                }
 	            }
 
-	            // A special, fast, case for the most common use of each
+	            // 如果没有传入参数参数args，则传入下标和属性名
 	        } else {
 	            if ( isObj ) {
 	                for ( name in obj ) {
@@ -633,16 +628,18 @@ var
 	        return obj;
 	    },
 
-	    // Use native String.trim function wherever possible
+	    // 用于移除字符串开头和结尾的空白符
 	    trim: core_trim && !core_trim.call("\uFEFF\xA0") ?
 	        function( text ) {
+	    		// 使用ES5新增的string方法
 	            return text == null ?
 	                "" :
 	                core_trim.call( text );
 	        } :
 
-	        // Otherwise use our own trimming functionality
+	        // 如果不支持ES5,则使用字符串替换的方式来移除空白字符
 	        function( text ) {
+	        	// text +"" 获取到text的字符串表示，然后用正则替换空白字符串
 	            return text == null ?
 	                "" :
 	                ( text + "" ).replace( rtrim, "" );
@@ -667,7 +664,7 @@ var
 
 	        return ret;
 	    },
-
+	    // 在数组中查找指定的元素并返回其下标，如果为找到会返回-1 elem==>要查找的值 arr==>待遍历的数组 i==>指定查找的位置，默认为0
 	    inArray: function( elem, arr, i ) {
 	        var len;
 
@@ -677,10 +674,11 @@ var
 	            }
 
 	            len = arr.length;
+	            //	修正参数i，默认为0，如果小于0，则加上len
 	            i = i ? i < 0 ? Math.max( 0, len + i ) : i : 0;
 
 	            for ( ; i < len; i++ ) {
-	                // Skip accessing in sparse arrays
+	                // 如果i in arr返回false，说明数组是不连续的也就不需要和指定值elem比较了
 	                if ( i in arr && arr[ i ] === elem ) {
 	                    return i;
 	                }
@@ -689,7 +687,7 @@ var
 
 	        return -1;
 	    },
-
+	    // 合并第二个数组和类数组到第一个数组或类数组中
 	    merge: function( first, second ) {
 	        var l = second.length,
 	            i = first.length,
@@ -701,6 +699,7 @@ var
 	            }
 
 	        } else {
+	        	// second 不是类数组，但是含有连续整形属性的对象
 	            while ( second[j] !== undefined ) {
 	                first[ i++ ] = second[ j++ ];
 	            }
@@ -710,7 +709,7 @@ var
 
 	        return first;
 	    },
-
+	    // 用于查找数组中满足过滤函数的元素，原数组不受影响 inv==>为true是则返回一个不满足回调函数的元素数组
 	    grep: function( elems, callback, inv ) {
 	        var retVal,
 	            ret = [],
@@ -718,8 +717,6 @@ var
 	            length = elems.length;
 	        inv = !!inv;
 
-	        // Go through the array, only saving the items
-	        // that pass the validator function
 	        for ( ; i < length; i++ ) {
 	            retVal = !!callback( elems[ i ], i );
 	            if ( inv !== retVal ) {
@@ -730,7 +727,7 @@ var
 	        return ret;
 	    },
 
-	    // arg is for internal usage only
+	    // 静态方法对数组中的每个元素或对象的每个属性调用回调函数，并把回调函数的返回值放的 一个新的数组中
 	    map: function( elems, callback, arg ) {
 	        var value, key,
 	            ret = [],
@@ -739,7 +736,7 @@ var
 	            // jquery objects are treated as arrays
 	            isArray = elems instanceof jQuery || length !== undefined && typeof length === "number" && ( ( length > 0 && elems[ 0 ] && elems[ length -1 ] ) || length === 0 || jQuery.isArray( elems ) ) ;
 
-	        // Go through the array, translating each of the items to their
+	        // 遍历数组
 	        if ( isArray ) {
 	            for ( ; i < length; i++ ) {
 	                value = callback( elems[ i ], i, arg );
@@ -749,7 +746,7 @@ var
 	                }
 	            }
 
-	            // Go through every key on the object,
+	        // 遍历对象
 	        } else {
 	            for ( key in elems ) {
 	                value = callback( elems[ key ], key, arg );
@@ -760,77 +757,78 @@ var
 	            }
 	        }
 
-	        // Flatten any nested arrays
+	        // 优雅的实现数组二位数组降维，可以理解成[].concat([1,1])
 	        return ret.concat.apply( [], ret );
 	    },
 
-	    // A global GUID counter for objects
+	    //一个全局计数器，用与jquery事件模块和缓存模块
 	    guid: 1,
 
-	    // Bind a function to a context, optionally partially applying any
-	    // arguments.
+	    // 接收一个函数，返回一个总是持有指定上下文的新函数
+	    // proxy(fn,context)===>指定参数fn的上下文始终为参数context
+	    // proxy(context,name)===>参数name为context的属性，指定参数name对应函数的上下文始终为context
 	    proxy: function( fn, context ) {
 	        var tmp, args, proxy;
-
+	        // 针对以上场景的第二种场景
 	        if ( typeof context === "string" ) {
 	            tmp = fn[ context ];
 	            context = fn;
 	            fn = tmp;
 	        }
 
-	        // Quick check to determine if target is callable, in the spec
-	        // this throws a TypeError, but we will just return undefined.
+	        // 确保fn是一个函数
 	        if ( !jQuery.isFunction( fn ) ) {
 	            return undefined;
 	        }
 
-	        // Simulated bind
+	        // 收集其他的入参
 	        args = core_slice.call( arguments, 2 );
+	        // 创建一个代理函数，在函数中调用原生的fn，并通过apply来指定上下文，并通过闭包获取到之前收集到的参数
 	        proxy = function() {
 	            return fn.apply( context, args.concat( core_slice.call( arguments ) ) );
 	        };
 
-	        // Set the guid of unique handler to the same of original handler, so it can be removed
+	        // 将代理函数和原始函数通过guid关联起来，便于移除函数是使用
 	        proxy.guid = fn.guid = fn.guid || jQuery.guid++;
 
 	        return proxy;
 	    },
 
-	    // Multifunctional method to get and set values of a collection
-	    // The value/s can optionally be executed if it's a function
+	    //  elems==> 在jq源码中应用场景为this，fn==>函数 ，key==> 属性 ，value==>值，chainable ==>是否可以链式调用 ，emptyGet==> this中没有选中对象的返回值, pass==>是否为原始数据，如果为false，说明value是个函数 
 	    access: function( elems, fn, key, value, chainable, emptyGet, pass ) {
 	        var exec,
 	            bulk = key == null,
 	            i = 0,
 	            length = elems.length;
 
-	        // Sets many values
+	        // 如果参数key是对象，则表示要设置多个属性，遍历参数key，遍历调用access方法，设置为可链式调用
 	        if ( key && typeof key === "object" ) {
 	            for ( i in key ) {
 	                jQuery.access( elems, fn, i, key[i], 1, emptyGet, value );
 	            }
 	            chainable = 1;
 
-	            // Sets one value
+	            // 设置一个属性
 	        } else if ( value !== undefined ) {
-	            // Optionally, function values get executed if exec is true
+	        	
 	            exec = pass === undefined && jQuery.isFunction( value );
-
+	            
+	            //是否要批量执行，主要看fn的实现逻辑
 	            if ( bulk ) {
-	                // Bulk operations only iterate when executing function values
 	                if ( exec ) {
+	                	// 执行$("#id").html(function(){return value})
 	                    exec = fn;
 	                    fn = function( elem, key, value ) {
 	                        return exec.call( jQuery( elem ), value );
 	                    };
 
-	                    // Otherwise they run against the entire set
+	                    // fn直接调用整个elems
 	                } else {
 	                    fn.call( elems, value );
 	                    fn = null;
 	                }
 	            }
-
+	            //如果要批量执行fn，则递归循环elems，针对每个elems依次调用fn
 	            if ( fn ) {
 	                for (; i < length; i++ ) {
 	                    fn( elems[i], key, exec ? value.call( elems[i], i, fn( elems[i], key ) ) : value, pass );
@@ -843,47 +841,45 @@ var
 	        return chainable ?
 	            elems :
 
-	            // Gets
+	            // 为get取值，不要链式调用
 	            bulk ?
 	                fn.call( elems ) :
 	                length ? fn( elems[0], key ) : emptyGet;
 	    },
-
+	    // 当前时间的毫秒显示的简写
 	    now: function() {
 	        return ( new Date() ).getTime();
 	    }
 	});
-
+	
 	jQuery.ready.promise = function( obj ) {
 	    if ( !readyList ) {
-
+	    	// 初始化jquery ready回调列表对象readyList
 	        readyList = jQuery.Deferred();
 
-	        // Catch cases where $(document).ready() is called after the browser event has already occurred.
-	        // we once tried to use readyState "interactive" here, but it caused issues like the one
-	        // discovered by ChrisS here: http://bugs.jquery.com/ticket/12282#comment:15
+	        // 在document加载完后执行ready
 	        if ( document.readyState === "complete" ) {
 	            // Handle it asynchronously to allow scripts the opportunity to delay ready
 	            setTimeout( jQuery.ready, 1 );
 
-	            // Standards-based browsers support DOMContentLoaded
+	            // 标准浏览器支持DOMContentLoaded事件，使用时间处理
 	        } else if ( document.addEventListener ) {
-	            // Use the handy event callback
+	            // 优先绑定DOMContentLoaded，不需要等所有静态资源都加载
 	            document.addEventListener( "DOMContentLoaded", DOMContentLoaded, false );
 
-	            // A fallback to window.onload, that will always work
+	            // 回退到window.onload事件绑定，所有的浏览器都支持
 	            window.addEventListener( "load", jQuery.ready, false );
 
 	            // If IE event model is used
 	        } else {
-	            // Ensure firing before onload, maybe late but safe also for iframes
+	            // 优先绑定onreadystatechange，不需要等所有静态资源都加载
 	            document.attachEvent( "onreadystatechange", DOMContentLoaded );
 
-	            // A fallback to window.onload, that will always work
+	            // 回退到window.onload事件绑定，所有的浏览器都支持
 	            window.attachEvent( "onload", jQuery.ready );
 
-	            // If IE and not a frame
-	            // continually check to see if the document is ready
+	            //如果IE并且不是一个frame，针对ie9一下的版本
+	            //不断地检查，看是否该文件已准备就绪
 	            var top = false;
 
 	            try {
@@ -895,14 +891,13 @@ var
 	                    if ( !jQuery.isReady ) {
 
 	                        try {
-	                            // Use the trick by Diego Perini
 	                            // http://javascript.nwbox.com/IEContentLoaded/
 	                            top.doScroll("left");
 	                        } catch(e) {
 	                            return setTimeout( doScrollCheck, 50 );
 	                        }
 
-	                        // and execute any waiting functions
+	                        // 执行回调函数
 	                        jQuery.ready();
 	                    }
 	                })();
@@ -917,10 +912,10 @@ var
 	    class2type[ "[object " + name + "]" ] = name.toLowerCase();
 	});
 
-	// All jQuery objects should point back to these
-	rootjQuery = jQuery(document);
+	// 初始化jquery查找上下文，同时触发document的ready事件 
+	rootjQuery = jQuery(document);  
 
-	// Cleanup functions for the document ready method
+	// 清理回调函数，避免二次触发
 	if ( document.addEventListener ) {
 	  DOMContentLoaded = function() {
 	    document.removeEventListener( "DOMContentLoaded", DOMContentLoaded, false );
@@ -929,31 +924,11 @@ var
 
 	} else if ( document.attachEvent ) {
 	  DOMContentLoaded = function() {
-	    // Make sure body exists, at least, in case IE gets a little overzealous (ticket #5443).
 	    if ( document.readyState === "complete" ) {
 	      document.detachEvent( "onreadystatechange", DOMContentLoaded );
 	      jQuery.ready();
 	    }
 	  };
-	}
-
-	// The DOM ready check for Internet Explorer
-	function doScrollCheck() {
-	  if ( jQuery.isReady ) {
-	    return;
-	  }
-
-	  // If IE is used, use the trick by Diego Perini
-	  // http://javascript.nwbox.com/IEContentLoaded/
-	  try {
-	    document.documentElement.doScroll("left");
-	  } catch(e) {
-	    setTimeout( doScrollCheck, 1 );
-	    return;
-	  }
-
-	  // and execute any waiting functions
-	  jQuery.ready();
 	}
 
 	return jQuery;
