@@ -784,10 +784,7 @@ jQuery.Callbacks = <span class="hljs-function"><span class="hljs-keyword">functi
 
         <span class="hljs-keyword">return</span> self;
 };
-jQuery.extend({
-
-    Deferred: <span class="hljs-function"><span class="hljs-keyword">function</span>(<span class="hljs-params"> func </span>) </span>{
-            <span class="hljs-keyword">var</span> tuples = [</pre></div></div>
+jQuery.extend({</pre></div></div>
             
         </li>
         
@@ -798,29 +795,12 @@ jQuery.extend({
               <div class="pilwrap ">
                 <a class="pilcrow" href="#section-44">&#182;</a>
               </div>
-              <p>action, add listener, listener list, final state</p>
+              <p>在jquery.callbacks基础上，为回调函数增加了状态，并提供多个状态的回调函数</p>
 
             </div>
             
-            <div class="content"><div class='highlight'><pre>                            [ <span class="hljs-string">"resolve"</span>, <span class="hljs-string">"done"</span>, jQuery.Callbacks(<span class="hljs-string">"once memory"</span>), <span class="hljs-string">"resolved"</span> ],
-                            [ <span class="hljs-string">"reject"</span>, <span class="hljs-string">"fail"</span>, jQuery.Callbacks(<span class="hljs-string">"once memory"</span>), <span class="hljs-string">"rejected"</span> ],
-                            [ <span class="hljs-string">"notify"</span>, <span class="hljs-string">"progress"</span>, jQuery.Callbacks(<span class="hljs-string">"memory"</span>) ]
-                    ],
-                    state = <span class="hljs-string">"pending"</span>,
-                    promise = {
-                            state: <span class="hljs-function"><span class="hljs-keyword">function</span>(<span class="hljs-params"></span>) </span>{
-                                    <span class="hljs-keyword">return</span> state;
-                            },
-                            always: <span class="hljs-function"><span class="hljs-keyword">function</span>(<span class="hljs-params"></span>) </span>{
-                                    deferred.done( <span class="hljs-built_in">arguments</span> ).fail( <span class="hljs-built_in">arguments</span> );
-                                    <span class="hljs-keyword">return</span> <span class="hljs-keyword">this</span>;
-                            },
-                            then: <span class="hljs-function"><span class="hljs-keyword">function</span>(<span class="hljs-params"> <span class="hljs-comment">/* fnDone, fnFail, fnProgress */</span> </span>) </span>{
-                                    <span class="hljs-keyword">var</span> fns = <span class="hljs-built_in">arguments</span>;
-                                    <span class="hljs-keyword">return</span> jQuery.Deferred(<span class="hljs-function"><span class="hljs-keyword">function</span>(<span class="hljs-params"> newDefer </span>) </span>{
-                                            jQuery.each( tuples, <span class="hljs-function"><span class="hljs-keyword">function</span>(<span class="hljs-params"> i, tuple </span>) </span>{
-                                                    <span class="hljs-keyword">var</span> action = tuple[ <span class="hljs-number">0</span> ],
-                                                            fn = fns[ i ];</pre></div></div>
+            <div class="content"><div class='highlight'><pre>    Deferred: <span class="hljs-function"><span class="hljs-keyword">function</span>(<span class="hljs-params"> func </span>) </span>{
+            <span class="hljs-keyword">var</span> tuples = [</pre></div></div>
             
         </li>
         
@@ -831,28 +811,15 @@ jQuery.extend({
               <div class="pilwrap ">
                 <a class="pilcrow" href="#section-45">&#182;</a>
               </div>
-              <p>deferred[ done | fail | progress ] for forwarding actions to newDefer</p>
+              <p>action, add listener, listener list, final state</p>
 
             </div>
             
-            <div class="content"><div class='highlight'><pre>                                                    deferred[ tuple[<span class="hljs-number">1</span>] ]( jQuery.isFunction( fn ) ?
-                                                            <span class="hljs-function"><span class="hljs-keyword">function</span>(<span class="hljs-params"></span>) </span>{
-                                                                    <span class="hljs-keyword">var</span> returned = fn.apply( <span class="hljs-keyword">this</span>, <span class="hljs-built_in">arguments</span> );
-                                                                    <span class="hljs-keyword">if</span> ( returned &amp;&amp; jQuery.isFunction( returned.promise ) ) {
-                                                                            returned.promise()
-                                                                                    .done( newDefer.resolve )
-                                                                                    .fail( newDefer.reject )
-                                                                                    .progress( newDefer.notify );
-                                                                    } <span class="hljs-keyword">else</span> {
-                                                                            newDefer[ action + <span class="hljs-string">"With"</span> ]( <span class="hljs-keyword">this</span> === deferred ? newDefer : <span class="hljs-keyword">this</span>, [ returned ] );
-                                                                    }
-                                                            } :
-                                                            newDefer[ action ]
-                                                    );
-                                            });
-                                            fns = <span class="hljs-literal">null</span>;
-                                    }).promise();
-                            },</pre></div></div>
+            <div class="content"><div class='highlight'><pre>                            [ <span class="hljs-string">"resolve"</span>, <span class="hljs-string">"done"</span>, jQuery.Callbacks(<span class="hljs-string">"once memory"</span>), <span class="hljs-string">"resolved"</span> ],
+                            [ <span class="hljs-string">"reject"</span>, <span class="hljs-string">"fail"</span>, jQuery.Callbacks(<span class="hljs-string">"once memory"</span>), <span class="hljs-string">"rejected"</span> ],
+                            [ <span class="hljs-string">"notify"</span>, <span class="hljs-string">"progress"</span>, jQuery.Callbacks(<span class="hljs-string">"memory"</span>) ]
+                    ],
+                    state = <span class="hljs-string">"pending"</span>,</pre></div></div>
             
         </li>
         
@@ -863,8 +830,137 @@ jQuery.extend({
               <div class="pilwrap ">
                 <a class="pilcrow" href="#section-46">&#182;</a>
               </div>
-              <p>Get a promise for this deferred
-If obj is provided, the promise aspect is added to the object</p>
+              <p>异步队列的只读副本</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>                    promise = {</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-47">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-47">&#182;</a>
+              </div>
+              <p>返回异步队列的状态</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>            				state: <span class="hljs-function"><span class="hljs-keyword">function</span>(<span class="hljs-params"></span>) </span>{
+                                    <span class="hljs-keyword">return</span> state;
+                            },</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-48">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-48">&#182;</a>
+              </div>
+              <p>用于将函数添加到成功队列和失败队列中</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>                            always: <span class="hljs-function"><span class="hljs-keyword">function</span>(<span class="hljs-params"></span>) </span>{
+                                    deferred.done( <span class="hljs-built_in">arguments</span> ).fail( <span class="hljs-built_in">arguments</span> );
+                                    <span class="hljs-keyword">return</span> <span class="hljs-keyword">this</span>;
+                            },</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-49">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-49">&#182;</a>
+              </div>
+              <p>接收三个可选的过滤函数为参数，用于过滤当前异步队列的状态和参数，并返回一个新的异步队列只读副本，可以理解为一个defer过滤器</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>                            then: <span class="hljs-function"><span class="hljs-keyword">function</span>(<span class="hljs-params"> <span class="hljs-comment">/* fnDone, fnFail, fnProgress */</span> </span>) </span>{
+                                    <span class="hljs-keyword">var</span> fns = <span class="hljs-built_in">arguments</span>;
+                                    <span class="hljs-keyword">return</span> jQuery.Deferred(<span class="hljs-function"><span class="hljs-keyword">function</span>(<span class="hljs-params"> newDefer </span>) </span>{
+                                            jQuery.each( tuples, <span class="hljs-function"><span class="hljs-keyword">function</span>(<span class="hljs-params"> i, tuple </span>) </span>{
+                                                    <span class="hljs-keyword">var</span> action = tuple[ <span class="hljs-number">0</span> ],
+                                                            fn = fns[ i ];
+                                                    deferred[ tuple[<span class="hljs-number">1</span>] ]( jQuery.isFunction( fn ) ?
+                                                            <span class="hljs-function"><span class="hljs-keyword">function</span>(<span class="hljs-params"></span>) </span>{
+                                                                    <span class="hljs-keyword">var</span> returned = fn.apply( <span class="hljs-keyword">this</span>, <span class="hljs-built_in">arguments</span> );
+                                                                    <span class="hljs-keyword">if</span> ( returned &amp;&amp; jQuery.isFunction( returned.promise ) ) {</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-50">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-50">&#182;</a>
+              </div>
+              <p>返回值是defer对象，将newDefer的执行放到该defer对象的的回调函数列表里</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>                                                                            returned.promise()
+                                                                                    .done( newDefer.resolve )
+                                                                                    .fail( newDefer.reject )
+                                                                                    .progress( newDefer.notify );
+                                                                    } <span class="hljs-keyword">else</span> {</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-51">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-51">&#182;</a>
+              </div>
+              <p>返回值returned作为参数，newDefer依赖外层执行结果</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>                                                                            newDefer[ action + <span class="hljs-string">"With"</span> ]( <span class="hljs-keyword">this</span> === deferred ? newDefer : <span class="hljs-keyword">this</span>, [ returned ] );
+                                                                    }
+                                                            } :</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-52">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-52">&#182;</a>
+              </div>
+              <p>如果传入的参数不是函数，newDefer的执行依赖外层调用者的状态</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>                                                            newDefer[ action ]
+                                                    );
+                                            });
+                                            fns = <span class="hljs-literal">null</span>;
+                                    }).promise();
+                            },</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-53">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-53">&#182;</a>
+              </div>
+              <p>如果没有传入obj，返回当前异步队列只读副本promise ,如果传入参数obj，将只读的副本promise的方法添加到obj中</p>
 
             </div>
             
@@ -877,11 +973,11 @@ If obj is provided, the promise aspect is added to the object</p>
         </li>
         
         
-        <li id="section-47">
+        <li id="section-54">
             <div class="annotation">
               
               <div class="pilwrap ">
-                <a class="pilcrow" href="#section-47">&#182;</a>
+                <a class="pilcrow" href="#section-54">&#182;</a>
               </div>
               <p>Keep pipe for back-compat</p>
 
@@ -892,13 +988,13 @@ If obj is provided, the promise aspect is added to the object</p>
         </li>
         
         
-        <li id="section-48">
+        <li id="section-55">
             <div class="annotation">
               
               <div class="pilwrap ">
-                <a class="pilcrow" href="#section-48">&#182;</a>
+                <a class="pilcrow" href="#section-55">&#182;</a>
               </div>
-              <p>Add list-specific methods</p>
+              <p>为异步队列增加相应得回调函数列表方法</p>
 
             </div>
             
@@ -909,129 +1005,19 @@ If obj is provided, the promise aspect is added to the object</p>
         </li>
         
         
-        <li id="section-49">
-            <div class="annotation">
-              
-              <div class="pilwrap ">
-                <a class="pilcrow" href="#section-49">&#182;</a>
-              </div>
-              <p>promise[ done | fail | progress ] = list.add</p>
-
-            </div>
-            
-            <div class="content"><div class='highlight'><pre>                    promise[ tuple[<span class="hljs-number">1</span>] ] = list.add;</pre></div></div>
-            
-        </li>
-        
-        
-        <li id="section-50">
-            <div class="annotation">
-              
-              <div class="pilwrap ">
-                <a class="pilcrow" href="#section-50">&#182;</a>
-              </div>
-              <p>Handle state</p>
-
-            </div>
-            
-            <div class="content"><div class='highlight'><pre>                    <span class="hljs-keyword">if</span> ( stateString ) {
-                            list.add(<span class="hljs-function"><span class="hljs-keyword">function</span>(<span class="hljs-params"></span>) </span>{</pre></div></div>
-            
-        </li>
-        
-        
-        <li id="section-51">
-            <div class="annotation">
-              
-              <div class="pilwrap ">
-                <a class="pilcrow" href="#section-51">&#182;</a>
-              </div>
-              <p>state = [ resolved | rejected ]</p>
-
-            </div>
-            
-            <div class="content"><div class='highlight'><pre>                                    state = stateString;</pre></div></div>
-            
-        </li>
-        
-        
-        <li id="section-52">
-            <div class="annotation">
-              
-              <div class="pilwrap ">
-                <a class="pilcrow" href="#section-52">&#182;</a>
-              </div>
-              <p>[ reject_list | resolve_list ].disable; progress_list.lock</p>
-
-            </div>
-            
-            <div class="content"><div class='highlight'><pre>                            }, tuples[ i ^ <span class="hljs-number">1</span> ][ <span class="hljs-number">2</span> ].disable, tuples[ <span class="hljs-number">2</span> ][ <span class="hljs-number">2</span> ].lock );
-                    }</pre></div></div>
-            
-        </li>
-        
-        
-        <li id="section-53">
-            <div class="annotation">
-              
-              <div class="pilwrap ">
-                <a class="pilcrow" href="#section-53">&#182;</a>
-              </div>
-              <p>deferred[ resolve | reject | notify ] = list.fire</p>
-
-            </div>
-            
-            <div class="content"><div class='highlight'><pre>                    deferred[ tuple[<span class="hljs-number">0</span>] ] = list.fire;
-                    deferred[ tuple[<span class="hljs-number">0</span>] + <span class="hljs-string">"With"</span> ] = list.fireWith;
-            });</pre></div></div>
-            
-        </li>
-        
-        
-        <li id="section-54">
-            <div class="annotation">
-              
-              <div class="pilwrap ">
-                <a class="pilcrow" href="#section-54">&#182;</a>
-              </div>
-              <p>Make the deferred a promise</p>
-
-            </div>
-            
-            <div class="content"><div class='highlight'><pre>            promise.promise( deferred );</pre></div></div>
-            
-        </li>
-        
-        
-        <li id="section-55">
-            <div class="annotation">
-              
-              <div class="pilwrap ">
-                <a class="pilcrow" href="#section-55">&#182;</a>
-              </div>
-              <p>Call given func if any</p>
-
-            </div>
-            
-            <div class="content"><div class='highlight'><pre>            <span class="hljs-keyword">if</span> ( func ) {
-                    func.call( deferred, deferred );
-            }</pre></div></div>
-            
-        </li>
-        
-        
         <li id="section-56">
             <div class="annotation">
               
               <div class="pilwrap ">
                 <a class="pilcrow" href="#section-56">&#182;</a>
               </div>
-              <p>All done!</p>
+              <p>promise[ done | fail | progress ] = list.add</p>
 
             </div>
             
-            <div class="content"><div class='highlight'><pre>            <span class="hljs-keyword">return</span> deferred;
-    },</pre></div></div>
+            <div class="content"><div class='highlight'><pre>                    promise[ tuple[<span class="hljs-number">1</span>] ] = list.add;
+
+                    <span class="hljs-keyword">if</span> ( stateString ) {</pre></div></div>
             
         </li>
         
@@ -1042,7 +1028,105 @@ If obj is provided, the promise aspect is added to the object</p>
               <div class="pilwrap ">
                 <a class="pilcrow" href="#section-57">&#182;</a>
               </div>
-              <p>Deferred helper</p>
+              <p>在异步队列添加三个成功/失败的回调方法，分别设置其状态，并禁用另外一个回调函数列表，同时锁定通知回调列表</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>                            list.add(<span class="hljs-function"><span class="hljs-keyword">function</span>(<span class="hljs-params"></span>) </span>{</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-58">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-58">&#182;</a>
+              </div>
+              <p>state = [ resolved | rejected ]</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>                                    state = stateString;</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-59">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-59">&#182;</a>
+              </div>
+              <p>这一块写法很有记录，通过i^1来取反，让另为一个回调列表禁用</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>                            }, tuples[ i ^ <span class="hljs-number">1</span> ][ <span class="hljs-number">2</span> ].disable, tuples[ <span class="hljs-number">2</span> ][ <span class="hljs-number">2</span> ].lock );
+                    }</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-60">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-60">&#182;</a>
+              </div>
+              <p>触发成功，失败，通知消息回调函数列表的触发方法</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>                    deferred[ tuple[<span class="hljs-number">0</span>] ] = list.fire;
+                    deferred[ tuple[<span class="hljs-number">0</span>] + <span class="hljs-string">"With"</span> ] = list.fireWith;
+            });</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-61">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-61">&#182;</a>
+              </div>
+              <p>为异步队列添加只读方法</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>            promise.promise( deferred );</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-62">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-62">&#182;</a>
+              </div>
+              <p>如果传入func，把deferred设置为上下文，同时把deferred作为参数传进去，这样在func执行过程，仍然可以调用异步队列</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>            <span class="hljs-keyword">if</span> ( func ) {
+                    func.call( deferred, deferred );
+            }
+
+            <span class="hljs-keyword">return</span> deferred;
+    },</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-63">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-63">&#182;</a>
+              </div>
+              <p>传入多个异步队列为参数，返回一个新的主异步队列的只读副本，将追踪传入异步队列的所有状态</p>
 
             </div>
             
@@ -1054,13 +1138,13 @@ If obj is provided, the promise aspect is added to the object</p>
         </li>
         
         
-        <li id="section-58">
+        <li id="section-64">
             <div class="annotation">
               
               <div class="pilwrap ">
-                <a class="pilcrow" href="#section-58">&#182;</a>
+                <a class="pilcrow" href="#section-64">&#182;</a>
               </div>
-              <p>the count of uncompleted subordinates</p>
+              <p>如果length=1，则remaining=1，如果length不等于1，参数为deferred对象，则返回参数的长度</p>
 
             </div>
             
@@ -1069,39 +1153,68 @@ If obj is provided, the promise aspect is added to the object</p>
         </li>
         
         
-        <li id="section-59">
+        <li id="section-65">
             <div class="annotation">
               
               <div class="pilwrap ">
-                <a class="pilcrow" href="#section-59">&#182;</a>
+                <a class="pilcrow" href="#section-65">&#182;</a>
               </div>
-              <p>the master Deferred. If resolveValues consist of only a single Deferred, just use that.</p>
+              <p>如果参数只有一个，则使用已有的deferred对象，否则则新建一个</p>
 
             </div>
             
-            <div class="content"><div class='highlight'><pre>                    deferred = remaining === <span class="hljs-number">1</span> ? subordinate : jQuery.Deferred(),</pre></div></div>
+            <div class="content"><div class='highlight'><pre>                    deferred = remaining === <span class="hljs-number">1</span> ? subordinate : jQuery.Deferred(),
+
+                    updateFunc = <span class="hljs-function"><span class="hljs-keyword">function</span>(<span class="hljs-params"> i, contexts, values </span>) </span>{</pre></div></div>
             
         </li>
         
         
-        <li id="section-60">
+        <li id="section-66">
             <div class="annotation">
               
               <div class="pilwrap ">
-                <a class="pilcrow" href="#section-60">&#182;</a>
+                <a class="pilcrow" href="#section-66">&#182;</a>
               </div>
-              <p>Update function for both resolve and progress values</p>
+              <p>返回一个函数，为了创建一个闭包，保持i的值，返回到数组</p>
 
             </div>
             
-            <div class="content"><div class='highlight'><pre>                    updateFunc = <span class="hljs-function"><span class="hljs-keyword">function</span>(<span class="hljs-params"> i, contexts, values </span>) </span>{
-                            <span class="hljs-keyword">return</span> <span class="hljs-function"><span class="hljs-keyword">function</span>(<span class="hljs-params"> value </span>) </span>{
-                                    contexts[ i ] = <span class="hljs-keyword">this</span>;
-                                    values[ i ] = <span class="hljs-built_in">arguments</span>.length &gt; <span class="hljs-number">1</span> ? core_slice.call( <span class="hljs-built_in">arguments</span> ) : value;
+            <div class="content"><div class='highlight'><pre>                            <span class="hljs-keyword">return</span> <span class="hljs-function"><span class="hljs-keyword">function</span>(<span class="hljs-params"> value </span>) </span>{
+                                    contexts[ i ] = <span class="hljs-keyword">this</span>;</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-67">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-67">&#182;</a>
+              </div>
+              <p>返回多个参数的情况，则直接转换成数组，返回一个话，直接返回当前值</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>                                    values[ i ] = <span class="hljs-built_in">arguments</span>.length &gt; <span class="hljs-number">1</span> ? core_slice.call( <span class="hljs-built_in">arguments</span> ) : value;
                                     <span class="hljs-keyword">if</span>( values === progressValues ) {
                                             deferred.notifyWith( contexts, values );
-                                    } <span class="hljs-keyword">else</span> <span class="hljs-keyword">if</span> ( !( --remaining ) ) {
-                                            deferred.resolveWith( contexts, values );
+                                    } <span class="hljs-keyword">else</span> <span class="hljs-keyword">if</span> ( !( --remaining ) ) {</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-68">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-68">&#182;</a>
+              </div>
+              <p>所有的Deferred的对象都已经触发完</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>                                            deferred.resolveWith( contexts, values );
                                     }
                             };
                     },
@@ -1111,13 +1224,13 @@ If obj is provided, the promise aspect is added to the object</p>
         </li>
         
         
-        <li id="section-61">
+        <li id="section-69">
             <div class="annotation">
               
               <div class="pilwrap ">
-                <a class="pilcrow" href="#section-61">&#182;</a>
+                <a class="pilcrow" href="#section-69">&#182;</a>
               </div>
-              <p>add listeners to Deferred subordinates; treat others as resolved</p>
+              <p>处理多个参数的情况</p>
 
             </div>
             
@@ -1126,8 +1239,22 @@ If obj is provided, the promise aspect is added to the object</p>
                     progressContexts = <span class="hljs-keyword">new</span> <span class="hljs-built_in">Array</span>( length );
                     resolveContexts = <span class="hljs-keyword">new</span> <span class="hljs-built_in">Array</span>( length );
                     <span class="hljs-keyword">for</span> ( ; i &lt; length; i++ ) {
-                            <span class="hljs-keyword">if</span> ( resolveValues[ i ] &amp;&amp; jQuery.isFunction( resolveValues[ i ].promise ) ) {
-                                    resolveValues[ i ].promise()
+                            <span class="hljs-keyword">if</span> ( resolveValues[ i ] &amp;&amp; jQuery.isFunction( resolveValues[ i ].promise ) ) {</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-70">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-70">&#182;</a>
+              </div>
+              <p>只处理deferred的对象</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>                                    resolveValues[ i ].promise()
                                             .done( updateFunc( i, resolveContexts, resolveValues ) )
                                             .fail( deferred.reject )
                                             .progress( updateFunc( i, progressContexts, progressValues ) );
@@ -1140,13 +1267,13 @@ If obj is provided, the promise aspect is added to the object</p>
         </li>
         
         
-        <li id="section-62">
+        <li id="section-71">
             <div class="annotation">
               
               <div class="pilwrap ">
-                <a class="pilcrow" href="#section-62">&#182;</a>
+                <a class="pilcrow" href="#section-71">&#182;</a>
               </div>
-              <p>if we’re not waiting on anything, resolve the master</p>
+              <p>针对上面最后一个循环走到else分支的场景，同时可以看到返回回调列表返回值的数组</p>
 
             </div>
             
