@@ -1,0 +1,857 @@
+<!DOCTYPE html>
+
+<html>
+<head>
+  <title>03-support.js</title>
+  <meta http-equiv="content-type" content="text/html; charset=UTF-8">
+  <meta name="viewport" content="width=device-width, target-densitydpi=160dpi, initial-scale=1.0; maximum-scale=1.0; user-scalable=0;">
+  <link rel="stylesheet" media="all" href="docco.css" />
+</head>
+<body>
+  <div id="container">
+    <div id="background"></div>
+    
+      <ul id="jump_to">
+        <li>
+          <a class="large" href="javascript:void(0);">Jump To &hellip;</a>
+          <a class="small" href="javascript:void(0);">+</a>
+          <div id="jump_wrapper">
+          <div id="jump_page_wrapper">
+            <div id="jump_page">
+              
+                
+                <a class="source" href="01-core.html">
+                  01-core.js
+                </a>
+              
+                
+                <a class="source" href="02-deferred.html">
+                  02-deferred.js
+                </a>
+              
+                
+                <a class="source" href="03-support.html">
+                  03-support.js
+                </a>
+              
+            </div>
+          </div>
+        </li>
+      </ul>
+    
+    <ul class="sections">
+        
+          <li id="title">
+              <div class="annotation">
+                  <h1>03-support.js</h1>
+              </div>
+          </li>
+        
+        
+        
+        <li id="section-1">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-1">&#182;</a>
+              </div>
+              <p>浏览器功能测试   源码 1243—1508行</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>jQuery.support = (<span class="hljs-function"><span class="hljs-keyword">function</span>(<span class="hljs-params"></span>) </span>{
+
+        <span class="hljs-keyword">var</span> support,
+                all,
+                a,
+                select,
+                opt,
+                input,
+                fragment,
+                eventName,
+                i,
+                isSupported,
+                clickFn,
+                div = <span class="hljs-built_in">document</span>.createElement(<span class="hljs-string">"div"</span>);</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-2">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-2">&#182;</a>
+              </div>
+              <p>Setup</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>        div.setAttribute( <span class="hljs-string">"className"</span>, <span class="hljs-string">"t"</span> );</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-3">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-3">&#182;</a>
+              </div>
+              <p>字符串前面的空格用于leadingWhitespace，来看浏览器是否会保留空格</p>
+<p><table></table>用于tbody测试项</p>
+<p><link/>用于htmlSerialize测试项
+href=’/a’用于hrefNormalized测试项</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>        div.innerHTML = <span class="hljs-string">"  &lt;link/&gt;&lt;table&gt;&lt;/table&gt;&lt;a href='/a'&gt;a&lt;/a&gt;&lt;input type='checkbox'/&gt;"</span>;</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-4">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-4">&#182;</a>
+              </div>
+              <p>Support tests won’t run in some limited or non-browser environments</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>        all = div.getElementsByTagName(<span class="hljs-string">"*"</span>);
+        a = div.getElementsByTagName(<span class="hljs-string">"a"</span>)[ <span class="hljs-number">0</span> ];
+        <span class="hljs-keyword">if</span> ( !all || !a || !all.length ) {
+                <span class="hljs-keyword">return</span> {};
+        }</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-5">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-5">&#182;</a>
+              </div>
+              <p>First batch of tests</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>        select = <span class="hljs-built_in">document</span>.createElement(<span class="hljs-string">"select"</span>);
+        opt = select.appendChild( <span class="hljs-built_in">document</span>.createElement(<span class="hljs-string">"option"</span>) );
+        input = div.getElementsByTagName(<span class="hljs-string">"input"</span>)[ <span class="hljs-number">0</span> ];</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-6">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-6">&#182;</a>
+              </div>
+              <p>用来测试style</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>        a.style.cssText = <span class="hljs-string">"top:1px;float:left;opacity:.5"</span>;
+        support = {</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-7">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-7">&#182;</a>
+              </div>
+              <p>如果浏览器在使用innerHTML保留空格，则该项测试会返回true，为文本节点，在IE6-IE8为false，应用于clean方法中，具体在6356行</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>                leadingWhitespace: ( div.firstChild.nodeType === <span class="hljs-number">3</span> ),</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-8">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-8">&#182;</a>
+              </div>
+              <p>在大部分浏览器中，tbody是可选的，只有在IE6,IE7下浏览器会自动插入tbody节点。在ie6-ie7下返回false，也应用于clean方法中</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>                tbody: !div.getElementsByTagName(<span class="hljs-string">"tbody"</span>).length,</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-9">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-9">&#182;</a>
+              </div>
+              <p>在ie6-ie8下，该返回值为false，如果想要正确序列化link元素，许在外层包装一层div</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>                htmlSerialize: !!div.getElementsByTagName(<span class="hljs-string">"link"</span>).length,</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-10">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-10">&#182;</a>
+              </div>
+              <p>是否可以通过dom属性style直接返回，在ie6-8中返回false，需要使用style.cssText访问内联样式</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>                style: <span class="hljs-regexp">/top/</span>.test( a.getAttribute(<span class="hljs-string">"style"</span>) ),</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-11">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-11">&#182;</a>
+              </div>
+              <p>在ie6-ie7下，属性href会返回加上域名的href。该测试项返回false</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>                hrefNormalized: ( a.getAttribute(<span class="hljs-string">"href"</span>) === <span class="hljs-string">"/a"</span> ),</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-12">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-12">&#182;</a>
+              </div>
+              <p>在ie6-ie8下不支持opacity，返回false
+Use a regex to work around a WebKit issue. See #5145</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>                opacity: <span class="hljs-regexp">/^0.5/</span>.test( a.style.opacity ),</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-13">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-13">&#182;</a>
+              </div>
+              <p>在IE下需要使用styleFloat来访问，在ie6-8下返回false，其他情况返回true</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>                cssFloat: !!a.style.cssFloat,</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-14">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-14">&#182;</a>
+              </div>
+              <p>在WebKit该值得默认值为空字符串，其他浏览器下均返回true</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>                checkOn: ( input.value === <span class="hljs-string">"on"</span> ),</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-15">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-15">&#182;</a>
+              </div>
+              <p>在ie下，和早期Safari下，返回false，其他浏览器返回true</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>                optSelected: opt.selected,</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-16">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-16">&#182;</a>
+              </div>
+              <p>在ie6,7下，或许属性需要传入DOM属性名称，而不是HTML属性名，在ie6,7下返回false</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>                getSetAttribute: div.className !== <span class="hljs-string">"t"</span>,</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-17">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-17">&#182;</a>
+              </div>
+              <p>测试表单元素是否支持enctype，在火狐早期版本中返回false</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>                enctype: !!<span class="hljs-built_in">document</span>.createElement(<span class="hljs-string">"form"</span>).enctype,</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-18">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-18">&#182;</a>
+              </div>
+              <p>测试浏览器是否能正确的复制HTML5元素，在ie6-ie8下返回false</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>                html5Clone: <span class="hljs-built_in">document</span>.createElement(<span class="hljs-string">"nav"</span>).cloneNode( <span class="hljs-literal">true</span> ).outerHTML !== <span class="hljs-string">"&lt;:nav&gt;&lt;/:nav&gt;"</span>,</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-19">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-19">&#182;</a>
+              </div>
+              <p>验证是否支持w3c盒模型，在ie6-9怪癖模式会返回false</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>                boxModel: ( <span class="hljs-built_in">document</span>.compatMode === <span class="hljs-string">"CSS1Compat"</span> ),</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-20">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-20">&#182;</a>
+              </div>
+              <p>在后面的版本中会定义</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>                submitBubbles: <span class="hljs-literal">true</span>,
+                changeBubbles: <span class="hljs-literal">true</span>,
+                focusinBubbles: <span class="hljs-literal">false</span>,
+                deleteExpando: <span class="hljs-literal">true</span>,
+                noCloneEvent: <span class="hljs-literal">true</span>,
+                inlineBlockNeedsLayout: <span class="hljs-literal">false</span>,
+                shrinkWrapBlocks: <span class="hljs-literal">false</span>,
+                reliableMarginRight: <span class="hljs-literal">true</span>,
+                boxSizingReliable: <span class="hljs-literal">true</span>,
+                pixelPosition: <span class="hljs-literal">false</span>
+        };
+
+       
+        input.checked = <span class="hljs-literal">true</span>;</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-21">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-21">&#182;</a>
+              </div>
+              <p>复制节点是否会复制选中状态，在ie浏览器下不会复制，值返回false</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>        support.noCloneChecked = input.cloneNode( <span class="hljs-literal">true</span> ).checked;
+
+       
+        select.disabled = <span class="hljs-literal">true</span>;</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-22">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-22">&#182;</a>
+              </div>
+              <p>在早期的Safari中如果select被禁用，子元素option会被自动禁用，只在早期Safari返回false</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>        support.optDisabled = !opt.disabled;</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-23">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-23">&#182;</a>
+              </div>
+              <p>是否允许删除DOM元素上的属性，在ie6-ie8下，该值为false</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>        <span class="hljs-keyword">try</span> {
+                <span class="hljs-keyword">delete</span> div.test;
+        } <span class="hljs-keyword">catch</span>( e ) {
+                support.deleteExpando = <span class="hljs-literal">false</span>;
+        }
+
+        <span class="hljs-keyword">if</span> ( !div.addEventListener &amp;&amp; div.attachEvent &amp;&amp; div.fireEvent ) {
+                div.attachEvent( <span class="hljs-string">"onclick"</span>, clickFn = <span class="hljs-function"><span class="hljs-keyword">function</span>(<span class="hljs-params"></span>) </span>{</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-24">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-24">&#182;</a>
+              </div>
+              <p>检测复制Dom是否会连event一起复制。如果会复制则为false</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>                        support.noCloneEvent = <span class="hljs-literal">false</span>;
+                });
+                div.cloneNode( <span class="hljs-literal">true</span> ).fireEvent(<span class="hljs-string">"onclick"</span>);
+                div.detachEvent( <span class="hljs-string">"onclick"</span>, clickFn );
+        }
+
+        input = <span class="hljs-built_in">document</span>.createElement(<span class="hljs-string">"input"</span>);
+        input.value = <span class="hljs-string">"t"</span>;
+        input.setAttribute( <span class="hljs-string">"type"</span>, <span class="hljs-string">"radio"</span> );</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-25">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-25">&#182;</a>
+              </div>
+              <p>在ie浏览器下，如果设置input的type属性为radio，会导致value丢失，在ie浏览器下返回false</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>        support.radioValue = input.value === <span class="hljs-string">"t"</span>;
+
+        input.setAttribute( <span class="hljs-string">"checked"</span>, <span class="hljs-string">"checked"</span> );</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-26">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-26">&#182;</a>
+              </div>
+              <p>#11217 - WebKit loses check when the name is after the checked attribute</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>        input.setAttribute( <span class="hljs-string">"name"</span>, <span class="hljs-string">"t"</span> );
+
+        div.appendChild( input );
+        fragment = <span class="hljs-built_in">document</span>.createDocumentFragment();
+        fragment.appendChild( div.lastChild );</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-27">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-27">&#182;</a>
+              </div>
+              <p>在ie6，ie7下，不能正确的复制文档片段中选中的值，返回false</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>        support.checkClone = fragment.cloneNode( <span class="hljs-literal">true</span> ).cloneNode( <span class="hljs-literal">true</span> ).lastChild.checked;</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-28">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-28">&#182;</a>
+              </div>
+              <p>添加的dom节点是否能保持选中状态，在ie6-7下返回false</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>        support.appendChecked = input.checked;
+
+        fragment.removeChild( input );
+        fragment.appendChild( div );</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-29">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-29">&#182;</a>
+              </div>
+              <p>Technique from Juriy Zaytsev
+<a href="http://perfectionkills.com/detecting-event-support-without-browser-sniffing/">http://perfectionkills.com/detecting-event-support-without-browser-sniffing/</a>
+We only care about the case where non-standard event systems
+are used, namely in IE. Short-circuiting here helps us to
+avoid an eval call (in setAttribute) which can cause CSP
+to go haywire. See: <a href="https://developer.mozilla.org/en/Security/CSP">https://developer.mozilla.org/en/Security/CSP</a>
+只针对ie测试，在ie6-8上，submit和change事件不会向上冒泡，返回为false，focusin其他浏览器不支持，只有ie6-8支持</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>        <span class="hljs-keyword">if</span> ( div.attachEvent ) {
+                <span class="hljs-keyword">for</span> ( i <span class="hljs-keyword">in</span> {
+                        submit: <span class="hljs-literal">true</span>,
+                        change: <span class="hljs-literal">true</span>,
+                        focusin: <span class="hljs-literal">true</span>
+                }) {
+                        eventName = <span class="hljs-string">"on"</span> + i;
+                        isSupported = ( eventName <span class="hljs-keyword">in</span> div );
+                        <span class="hljs-keyword">if</span> ( !isSupported ) {</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-30">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-30">&#182;</a>
+              </div>
+              <p>设置行内的事件监听函数，如果能转换成函数，则可认为支持事件冒泡</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>                                div.setAttribute( eventName, <span class="hljs-string">"return;"</span> );
+                                isSupported = ( <span class="hljs-keyword">typeof</span> div[ eventName ] === <span class="hljs-string">"function"</span> );
+                        }
+                        support[ i + <span class="hljs-string">"Bubbles"</span> ] = isSupported;
+                }
+        }</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-31">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-31">&#182;</a>
+              </div>
+              <p>Run tests that need a body at doc ready</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>        jQuery(<span class="hljs-function"><span class="hljs-keyword">function</span>(<span class="hljs-params"></span>) </span>{
+                <span class="hljs-keyword">var</span> container, div, tds, marginDiv,
+                        divReset = <span class="hljs-string">"padding:0;margin:0;border:0;display:block;overflow:hidden;"</span>,
+                        body = <span class="hljs-built_in">document</span>.getElementsByTagName(<span class="hljs-string">"body"</span>)[<span class="hljs-number">0</span>];
+
+                <span class="hljs-keyword">if</span> ( !body ) {</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-32">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-32">&#182;</a>
+              </div>
+              <p>Return for frameset docs that don’t have a body</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>                        <span class="hljs-keyword">return</span>;
+                }
+
+                container = <span class="hljs-built_in">document</span>.createElement(<span class="hljs-string">"div"</span>);
+                container.style.cssText = <span class="hljs-string">"visibility:hidden;border:0;width:0;height:0;position:static;top:0;margin-top:1px"</span>;
+                body.insertBefore( container, body.firstChild );</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-33">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-33">&#182;</a>
+              </div>
+              <p>Construct the test element</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>                div = <span class="hljs-built_in">document</span>.createElement(<span class="hljs-string">"div"</span>);
+                container.appendChild( div );
+
+                div.innerHTML = <span class="hljs-string">"&lt;table&gt;&lt;tr&gt;&lt;td&gt;&lt;/td&gt;&lt;td&gt;t&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;"</span>;
+                tds = div.getElementsByTagName(<span class="hljs-string">"td"</span>);
+                tds[ <span class="hljs-number">0</span> ].style.cssText = <span class="hljs-string">"padding:0;margin:0;border:0;display:none"</span>;</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-34">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-34">&#182;</a>
+              </div>
+              <p>判断空单元格是否支持可见高度offsetHeight</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>                isSupported = ( tds[ <span class="hljs-number">0</span> ].offsetHeight === <span class="hljs-number">0</span> );
+
+                tds[ <span class="hljs-number">0</span> ].style.display = <span class="hljs-string">""</span>;
+                tds[ <span class="hljs-number">1</span> ].style.display = <span class="hljs-string">"none"</span>;</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-35">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-35">&#182;</a>
+              </div>
+              <p>测试空单元格的可见高度offsetHeight为0，在ie6-ie8和ie9的怪异模式下，该值为1</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>                support.reliableHiddenOffsets = isSupported &amp;&amp; ( tds[ <span class="hljs-number">0</span> ].offsetHeight === <span class="hljs-number">0</span> );</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-36">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-36">&#182;</a>
+              </div>
+              <p>Check box-sizing and margin behavior</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>                div.innerHTML = <span class="hljs-string">""</span>;
+                div.style.cssText = <span class="hljs-string">"box-sizing:border-box;-moz-box-sizing:border-box;-webkit-box-sizing:border-box;padding:1px;border:1px;display:block;width:4px;margin-top:1%;position:absolute;top:1%;"</span>;
+                support.boxSizing = ( div.offsetWidth === <span class="hljs-number">4</span> );
+                support.doesNotIncludeMarginInBodyOffset = ( body.offsetTop !== <span class="hljs-number">1</span> );</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-37">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-37">&#182;</a>
+              </div>
+              <p>向上检测，在jsdom中不支持该方法</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>                <span class="hljs-keyword">if</span> ( <span class="hljs-built_in">window</span>.getComputedStyle ) {
+                        support.pixelPosition = ( <span class="hljs-built_in">window</span>.getComputedStyle( div, <span class="hljs-literal">null</span> ) || {} ).top !== <span class="hljs-string">"1%"</span>;
+                        support.boxSizingReliable = ( <span class="hljs-built_in">window</span>.getComputedStyle( div, <span class="hljs-literal">null</span> ) || { width: <span class="hljs-string">"4px"</span> } ).width === <span class="hljs-string">"4px"</span>;
+
+                        marginDiv = <span class="hljs-built_in">document</span>.createElement(<span class="hljs-string">"div"</span>);</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-38">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-38">&#182;</a>
+              </div>
+              <p>重置样式，避免不同浏览器下默认的样式，导致测试的结果不一样</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>                        marginDiv.style.cssText = div.style.cssText = divReset;
+                        marginDiv.style.marginRight = marginDiv.style.width = <span class="hljs-string">"0"</span>;
+                        div.style.width = <span class="hljs-string">"1px"</span>;
+                        div.appendChild( marginDiv );</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-39">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-39">&#182;</a>
+              </div>
+              <p>能否正确计算出样式marginRight(右外边距)，该测试主要用于2011年2月之前的webkit，它的getComputedStyle返回的getComputedStyle的marginRight是右边框距父元素右边框的距离</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>                        support.reliableMarginRight =
+                                !<span class="hljs-built_in">parseFloat</span>( ( <span class="hljs-built_in">window</span>.getComputedStyle( marginDiv, <span class="hljs-literal">null</span> ) || {} ).marginRight );
+                }
+
+                <span class="hljs-keyword">if</span> ( <span class="hljs-keyword">typeof</span> div.style.zoom !== <span class="hljs-string">"undefined"</span> ) {</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-40">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-40">&#182;</a>
+              </div>
+              <p>预先为元素设置width:1px;padding:1px，然后判断可见宽度是否为3，只有在ie6，ie7下可以通过inline来触发inline-block</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>                        div.innerHTML = <span class="hljs-string">""</span>;
+                        div.style.cssText = divReset + <span class="hljs-string">"width:1px;padding:1px;display:inline;zoom:1"</span>;</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-41">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-41">&#182;</a>
+              </div>
+              <p>只有在ie6,7下返回true</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>                        support.inlineBlockNeedsLayout = ( div.offsetWidth === <span class="hljs-number">3</span> );</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-42">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-42">&#182;</a>
+              </div>
+              <p><a href="http://w3help.org/zh-cn/causes/RD1002">详见</a></p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>                        div.style.display = <span class="hljs-string">"block"</span>;
+                        div.style.overflow = <span class="hljs-string">"visible"</span>;
+                        div.innerHTML = <span class="hljs-string">"&lt;div&gt;&lt;/div&gt;"</span>;
+                        div.firstChild.style.width = <span class="hljs-string">"5px"</span>;</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-43">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-43">&#182;</a>
+              </div>
+              <p>只有在ie6中，当子元素大于父元素时，父元素会被撑大，该值返回true</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>                        support.shrinkWrapBlocks = ( div.offsetWidth !== <span class="hljs-number">3</span> );
+
+                        container.style.zoom = <span class="hljs-number">1</span>;
+                }</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-44">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-44">&#182;</a>
+              </div>
+              <p>Null elements to avoid leaks in IE</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>                body.removeChild( container );
+                container = div = tds = marginDiv = <span class="hljs-literal">null</span>;
+        });</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-45">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-45">&#182;</a>
+              </div>
+              <p>Null elements to avoid leaks in IE</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>        fragment.removeChild( div );
+        all = a = select = opt = input = fragment = div = <span class="hljs-literal">null</span>;
+
+        <span class="hljs-keyword">return</span> support;
+})();</pre></div></div>
+            
+        </li>
+        
+    </ul>
+  </div>
+</body>
+</html>
