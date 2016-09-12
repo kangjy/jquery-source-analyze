@@ -1,0 +1,977 @@
+<!DOCTYPE html>
+
+<html>
+<head>
+  <title>04-data.js</title>
+  <meta http-equiv="content-type" content="text/html; charset=UTF-8">
+  <meta name="viewport" content="width=device-width, target-densitydpi=160dpi, initial-scale=1.0; maximum-scale=1.0; user-scalable=0;">
+  <link rel="stylesheet" media="all" href="docco.css" />
+</head>
+<body>
+  <div id="container">
+    <div id="background"></div>
+    
+      <ul id="jump_to">
+        <li>
+          <a class="large" href="javascript:void(0);">Jump To &hellip;</a>
+          <a class="small" href="javascript:void(0);">+</a>
+          <div id="jump_wrapper">
+          <div id="jump_page_wrapper">
+            <div id="jump_page">
+              
+                
+                <a class="source" href="01-core.html">
+                  01-core.js
+                </a>
+              
+                
+                <a class="source" href="02-deferred.html">
+                  02-deferred.js
+                </a>
+              
+                
+                <a class="source" href="03-support.html">
+                  03-support.js
+                </a>
+              
+                
+                <a class="source" href="04-data.html">
+                  04-data.js
+                </a>
+              
+            </div>
+          </div>
+        </li>
+      </ul>
+    
+    <ul class="sections">
+        
+          <li id="title">
+              <div class="annotation">
+                  <h1>04-data.js</h1>
+              </div>
+          </li>
+        
+        
+        
+        <li id="section-1">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-1">&#182;</a>
+              </div>
+              <p>Jquery数据缓存Data，源码1509—1847
+以一种安全的方式为DOM元素附加类型的数据，避免在javascript对象和DOM元素之间出现循环引用而导致的内存泄漏
+在jquery内部，数据缓存模块为队列模块、动画模块、样式操作模块、事件系统提供基础功能</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre><span class="hljs-keyword">var</span> rbrace = <span class="hljs-regexp">/(?:\{[\s\S]*\}|\[[\s\S]*\])$/</span>,
+	rmultiDash = <span class="hljs-regexp">/([A-Z])/g</span>;
+jQuery.extend({</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-2">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-2">&#182;</a>
+              </div>
+              <p>全局缓存对象</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>	cache: {},
+
+	deletedIds: [],</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-3">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-3">&#182;</a>
+              </div>
+              <p>Remove at next major release (1.9/2.0)</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>	uuid: <span class="hljs-number">0</span>,</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-4">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-4">&#182;</a>
+              </div>
+              <p>每个jquery副本的唯一标识，值为jQuery+版本号+随机数，去掉其中的非数字字符</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>	expando: <span class="hljs-string">"jQuery"</span> + ( jQuery.fn.jquery + <span class="hljs-built_in">Math</span>.random() ).replace( <span class="hljs-regexp">/\D/g</span>, <span class="hljs-string">""</span> ),</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-5">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-5">&#182;</a>
+              </div>
+              <p>The following elements throw uncatchable exceptions if you
+attempt to add expando properties to them.</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>	noData: {
+		<span class="hljs-string">"embed"</span>: <span class="hljs-literal">true</span>,</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-6">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-6">&#182;</a>
+              </div>
+              <p>Ban all objects except for Flash (which handle expandos)</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>		<span class="hljs-string">"object"</span>: <span class="hljs-string">"clsid:D27CDB6E-AE6D-11cf-96B8-444553540000"</span>,
+		<span class="hljs-string">"applet"</span>: <span class="hljs-literal">true</span>
+	},
+
+	hasData: <span class="hljs-function"><span class="hljs-keyword">function</span>(<span class="hljs-params"> elem </span>) </span>{
+		elem = elem.nodeType ? jQuery.cache[ elem[jQuery.expando] ] : elem[ jQuery.expando ];
+		<span class="hljs-keyword">return</span> !!elem &amp;&amp; !isEmptyDataObject( elem );
+	},</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-7">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-7">&#182;</a>
+              </div>
+              <p>elem==&gt;与数据关联的的DOM元素  name==&gt;设置或读取的数据名 data==&gt;设置的数据值 pvt==&gt;表示设置的数据是内部数据还是自定义数据，该选项值在jq内部使用</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>	data: <span class="hljs-function"><span class="hljs-keyword">function</span>(<span class="hljs-params"> elem, name, data, pvt <span class="hljs-comment">/* Internal Use Only */</span> </span>) </span>{</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-8">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-8">&#182;</a>
+              </div>
+              <p>节点elem是否支持设置数据，如果不支持，直接返回</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>		<span class="hljs-keyword">if</span> ( !jQuery.acceptData( elem ) ) {
+			<span class="hljs-keyword">return</span>;
+		}
+
+		<span class="hljs-keyword">var</span> thisCache, ret,
+			
+			internalKey = jQuery.expando,
+			getByName = <span class="hljs-keyword">typeof</span> name === <span class="hljs-string">"string"</span>,</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-9">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-9">&#182;</a>
+              </div>
+              <p>判断是否是node节点</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>			isNode = elem.nodeType,</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-10">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-10">&#182;</a>
+              </div>
+              <p>如果是dom元素，为了避免js和DOM元素之间的循环引用，导致内存溢出，使用全局缓存对象</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>			cache = isNode ? jQuery.cache : elem,</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-11">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-11">&#182;</a>
+              </div>
+              <p>尝试取出关联ID,对于DOM元素，返回elem[jQuery.expando],对于js对象，返回jQuery.expando</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>			id = isNode ? elem[ internalKey ] : elem[ internalKey ] &amp;&amp; internalKey;</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-12">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-12">&#182;</a>
+              </div>
+              <p>getByName &amp;&amp; data === undefined 表示在读数据
+(!id || !cache[id] || (!pvt &amp;&amp; !cache[id].data)如果关联id不存在，没有数据，后面的如果为真，即为没有数据，也没有自定义</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>		<span class="hljs-keyword">if</span> ( (!id || !cache[id] || (!pvt &amp;&amp; !cache[id].data)) &amp;&amp; getByName &amp;&amp; data === <span class="hljs-literal">undefined</span> ) {</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-13">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-13">&#182;</a>
+              </div>
+              <p>尝试在没有任何数据上的对象上读取数据</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>			<span class="hljs-keyword">return</span>;
+		}
+
+		<span class="hljs-keyword">if</span> ( !id ) {
+			<span class="hljs-keyword">if</span> ( isNode ) {</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-14">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-14">&#182;</a>
+              </div>
+              <p>对于DOM元素，先从删除的id获取 ，如果没有，jQuery.guid自动加1，并附在DOM元素上</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>				elem[ internalKey ] = id = jQuery.deletedIds.pop() || jQuery.guid++;
+			} <span class="hljs-keyword">else</span> {</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-15">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-15">&#182;</a>
+              </div>
+              <p>对于javascript对象，关联id就是jQuery.expando</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>				id = internalKey;
+			}
+		}
+
+		<span class="hljs-keyword">if</span> ( !cache[ id ] ) {</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-16">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-16">&#182;</a>
+              </div>
+              <p>如果缓存对象不存在，则初始化为空对象</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>			cache[ id ] = {};
+
+			<span class="hljs-keyword">if</span> ( !isNode ) {</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-17">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-17">&#182;</a>
+              </div>
+              <p>如果是js对象，重写toJSON方法，避免执行JSON.stringify()时暴露缓存数据</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>				cache[ id ].toJSON = jQuery.noop;
+			}
+		}</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-18">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-18">&#182;</a>
+              </div>
+              <p>如果name是对象或函数，则把参数name直接合并到已经缓存的数据对象中</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>		<span class="hljs-keyword">if</span> ( <span class="hljs-keyword">typeof</span> name === <span class="hljs-string">"object"</span> || <span class="hljs-keyword">typeof</span> name === <span class="hljs-string">"function"</span> ) {
+			<span class="hljs-keyword">if</span> ( pvt ) {
+				cache[ id ] = jQuery.extend( cache[ id ], name );
+			} <span class="hljs-keyword">else</span> {
+				cache[ id ].data = jQuery.extend( cache[ id ].data, name );
+			}
+		}
+
+		thisCache = cache[ id ];</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-19">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-19">&#182;</a>
+              </div>
+              <p>如果pvt为true，则变量指向cache[ id ]，如果为false，值指向cache[ id ].data,保证变量总是指向正确存储数据的对象</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>		<span class="hljs-keyword">if</span> ( !pvt ) {
+			<span class="hljs-keyword">if</span> ( !thisCache.data ) {
+				thisCache.data = {};
+			}
+
+			thisCache = thisCache.data;
+		}
+
+		<span class="hljs-keyword">if</span> ( data !== <span class="hljs-literal">undefined</span> ) {</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-20">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-20">&#182;</a>
+              </div>
+              <p>转成驼峰式，便于在读取的时候，无论传入连字符还是驼峰式都可以读取到对应的数据</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>			thisCache[ jQuery.camelCase( name ) ] = data;
+		}</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-21">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-21">&#182;</a>
+              </div>
+              <p>如果参数name是字符串，返回该name对应的值，备注这一块好多书写的都是很说有问题，说data是undefined才会走这个逻辑，是错误的，请注意</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>		<span class="hljs-keyword">if</span> ( getByName ) {</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-22">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-22">&#182;</a>
+              </div>
+              <p>尝试读取参数name的数据</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>			ret = thisCache[ name ];
+
+			<span class="hljs-keyword">if</span> ( ret == <span class="hljs-literal">null</span> ) {</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-23">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-23">&#182;</a>
+              </div>
+              <p>如果没有找到，转换参数为驼峰</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>				ret = thisCache[ jQuery.camelCase( name ) ];
+			}
+		} <span class="hljs-keyword">else</span> {</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-24">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-24">&#182;</a>
+              </div>
+              <p>如果什么都不传入，返回缓存对象</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>			ret = thisCache;
+		}
+
+		<span class="hljs-keyword">return</span> ret;
+	},
+
+	removeData: <span class="hljs-function"><span class="hljs-keyword">function</span>(<span class="hljs-params"> elem, name, pvt <span class="hljs-comment">/* Internal Use Only */</span> </span>) </span>{
+		<span class="hljs-keyword">if</span> ( !jQuery.acceptData( elem ) ) {
+			<span class="hljs-keyword">return</span>;
+		}
+
+		<span class="hljs-keyword">var</span> thisCache, i, l,
+
+			isNode = elem.nodeType,</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-25">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-25">&#182;</a>
+              </div>
+              <p>See jQuery.data for more information</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>			cache = isNode ? jQuery.cache : elem,
+			id = isNode ? elem[ jQuery.expando ] : jQuery.expando;</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-26">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-26">&#182;</a>
+              </div>
+              <p>If there is already no cache entry for this object, there is no
+purpose in continuing</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>		<span class="hljs-keyword">if</span> ( !cache[ id ] ) {
+			<span class="hljs-keyword">return</span>;
+		}
+
+		<span class="hljs-keyword">if</span> ( name ) {
+
+			thisCache = pvt ? cache[ id ] : cache[ id ].data;
+
+			<span class="hljs-keyword">if</span> ( thisCache ) {</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-27">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-27">&#182;</a>
+              </div>
+              <p>Support array or space separated string names for data keys</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>				<span class="hljs-keyword">if</span> ( !jQuery.isArray( name ) ) {</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-28">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-28">&#182;</a>
+              </div>
+              <p>try the string as a key before any manipulation</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>					<span class="hljs-keyword">if</span> ( name <span class="hljs-keyword">in</span> thisCache ) {
+						name = [ name ];
+					} <span class="hljs-keyword">else</span> {</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-29">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-29">&#182;</a>
+              </div>
+              <p>split the camel cased version by spaces unless a key with the spaces exists</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>						name = jQuery.camelCase( name );
+						<span class="hljs-keyword">if</span> ( name <span class="hljs-keyword">in</span> thisCache ) {
+							name = [ name ];
+						} <span class="hljs-keyword">else</span> {
+							name = name.split(<span class="hljs-string">" "</span>);
+						}
+					}
+				}
+
+				<span class="hljs-keyword">for</span> ( i = <span class="hljs-number">0</span>, l = name.length; i &lt; l; i++ ) {
+					<span class="hljs-keyword">delete</span> thisCache[ name[i] ];
+				}</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-30">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-30">&#182;</a>
+              </div>
+              <p>If there is no data left in the cache, we want to continue
+and let the cache object itself get destroyed</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>				<span class="hljs-keyword">if</span> ( !( pvt ? isEmptyDataObject : jQuery.isEmptyObject )( thisCache ) ) {
+					<span class="hljs-keyword">return</span>;
+				}
+			}
+		}</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-31">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-31">&#182;</a>
+              </div>
+              <p>See jQuery.data for more information</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>		<span class="hljs-keyword">if</span> ( !pvt ) {
+			<span class="hljs-keyword">delete</span> cache[ id ].data;</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-32">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-32">&#182;</a>
+              </div>
+              <p>Don’t destroy the parent cache unless the internal data object
+had been the only thing left in it</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>			<span class="hljs-keyword">if</span> ( !isEmptyDataObject( cache[ id ] ) ) {
+				<span class="hljs-keyword">return</span>;
+			}
+		}</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-33">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-33">&#182;</a>
+              </div>
+              <p>Destroy the cache</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>		<span class="hljs-keyword">if</span> ( isNode ) {
+			jQuery.cleanData( [ elem ], <span class="hljs-literal">true</span> );</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-34">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-34">&#182;</a>
+              </div>
+              <p>Use delete when supported for expandos or <code>cache</code> is not a window per isWindow (#10080)</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>		} <span class="hljs-keyword">else</span> <span class="hljs-keyword">if</span> ( jQuery.support.deleteExpando || cache != cache.window ) {
+			<span class="hljs-keyword">delete</span> cache[ id ];</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-35">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-35">&#182;</a>
+              </div>
+              <p>When all else fails, null</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>		} <span class="hljs-keyword">else</span> {
+			cache[ id ] = <span class="hljs-literal">null</span>;
+		}
+	},</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-36">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-36">&#182;</a>
+              </div>
+              <p>For internal use only.</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>	_data: <span class="hljs-function"><span class="hljs-keyword">function</span>(<span class="hljs-params"> elem, name, data </span>) </span>{
+		<span class="hljs-keyword">return</span> jQuery.data( elem, name, data, <span class="hljs-literal">true</span> );
+	},</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-37">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-37">&#182;</a>
+              </div>
+              <p>判断DOM元素是否可以设置数据</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>	acceptData: <span class="hljs-function"><span class="hljs-keyword">function</span>(<span class="hljs-params"> elem </span>) </span>{</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-38">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-38">&#182;</a>
+              </div>
+              <p>在embed，object(false除外)，applet元素上附加属性会抛出异常</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>		<span class="hljs-keyword">var</span> noData = elem.nodeName &amp;&amp; jQuery.noData[ elem.nodeName.toLowerCase() ];</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-39">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-39">&#182;</a>
+              </div>
+              <p>默认返回true，最后一个判断判断如果为flash，则返回true</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>		<span class="hljs-keyword">return</span> !noData || noData !== <span class="hljs-literal">true</span> &amp;&amp; elem.getAttribute(<span class="hljs-string">"classid"</span>) === noData;
+	}
+});
+
+jQuery.fn.extend({
+	data: <span class="hljs-function"><span class="hljs-keyword">function</span>(<span class="hljs-params"> key, value </span>) </span>{
+		<span class="hljs-keyword">var</span> parts, part, attr, name, l,
+			elem = <span class="hljs-keyword">this</span>[<span class="hljs-number">0</span>],
+			i = <span class="hljs-number">0</span>,
+			data = <span class="hljs-literal">null</span>;</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-40">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-40">&#182;</a>
+              </div>
+              <p>Gets all values</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>		<span class="hljs-keyword">if</span> ( key === <span class="hljs-literal">undefined</span> ) {
+			<span class="hljs-keyword">if</span> ( <span class="hljs-keyword">this</span>.length ) {
+				data = jQuery.data( elem );
+
+				<span class="hljs-keyword">if</span> ( elem.nodeType === <span class="hljs-number">1</span> &amp;&amp; !jQuery._data( elem, <span class="hljs-string">"parsedAttrs"</span> ) ) {
+					attr = elem.attributes;
+					<span class="hljs-keyword">for</span> ( l = attr.length; i &lt; l; i++ ) {
+						name = attr[i].name;
+
+						<span class="hljs-keyword">if</span> ( !name.indexOf( <span class="hljs-string">"data-"</span> ) ) {
+							name = jQuery.camelCase( name.substring(<span class="hljs-number">5</span>) );
+
+							dataAttr( elem, name, data[ name ] );
+						}
+					}
+					jQuery._data( elem, <span class="hljs-string">"parsedAttrs"</span>, <span class="hljs-literal">true</span> );
+				}
+			}
+
+			<span class="hljs-keyword">return</span> data;
+		}</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-41">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-41">&#182;</a>
+              </div>
+              <p>Sets multiple values</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>		<span class="hljs-keyword">if</span> ( <span class="hljs-keyword">typeof</span> key === <span class="hljs-string">"object"</span> ) {
+			<span class="hljs-keyword">return</span> <span class="hljs-keyword">this</span>.each(<span class="hljs-function"><span class="hljs-keyword">function</span>(<span class="hljs-params"></span>) </span>{
+				jQuery.data( <span class="hljs-keyword">this</span>, key );
+			});
+		}
+
+		parts = key.split( <span class="hljs-string">"."</span>, <span class="hljs-number">2</span> );
+		parts[<span class="hljs-number">1</span>] = parts[<span class="hljs-number">1</span>] ? <span class="hljs-string">"."</span> + parts[<span class="hljs-number">1</span>] : <span class="hljs-string">""</span>;
+		part = parts[<span class="hljs-number">1</span>] + <span class="hljs-string">"!"</span>;
+
+		<span class="hljs-keyword">return</span> jQuery.access( <span class="hljs-keyword">this</span>, <span class="hljs-function"><span class="hljs-keyword">function</span>(<span class="hljs-params"> value </span>) </span>{
+
+			<span class="hljs-keyword">if</span> ( value === <span class="hljs-literal">undefined</span> ) {
+				data = <span class="hljs-keyword">this</span>.triggerHandler( <span class="hljs-string">"getData"</span> + part, [ parts[<span class="hljs-number">0</span>] ] );</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-42">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-42">&#182;</a>
+              </div>
+              <p>Try to fetch any internally stored data first</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>				<span class="hljs-keyword">if</span> ( data === <span class="hljs-literal">undefined</span> &amp;&amp; elem ) {
+					data = jQuery.data( elem, key );
+					data = dataAttr( elem, key, data );
+				}
+
+				<span class="hljs-keyword">return</span> data === <span class="hljs-literal">undefined</span> &amp;&amp; parts[<span class="hljs-number">1</span>] ?
+					<span class="hljs-keyword">this</span>.data( parts[<span class="hljs-number">0</span>] ) :
+					data;
+			}
+
+			parts[<span class="hljs-number">1</span>] = value;
+			<span class="hljs-keyword">this</span>.each(<span class="hljs-function"><span class="hljs-keyword">function</span>(<span class="hljs-params"></span>) </span>{
+				<span class="hljs-keyword">var</span> self = jQuery( <span class="hljs-keyword">this</span> );
+
+				self.triggerHandler( <span class="hljs-string">"setData"</span> + part, parts );
+				jQuery.data( <span class="hljs-keyword">this</span>, key, value );
+				self.triggerHandler( <span class="hljs-string">"changeData"</span> + part, parts );
+			});
+		}, <span class="hljs-literal">null</span>, value, <span class="hljs-built_in">arguments</span>.length &gt; <span class="hljs-number">1</span>, <span class="hljs-literal">null</span>, <span class="hljs-literal">false</span> );
+	},
+
+	removeData: <span class="hljs-function"><span class="hljs-keyword">function</span>(<span class="hljs-params"> key </span>) </span>{
+		<span class="hljs-keyword">return</span> <span class="hljs-keyword">this</span>.each(<span class="hljs-function"><span class="hljs-keyword">function</span>(<span class="hljs-params"></span>) </span>{
+			jQuery.removeData( <span class="hljs-keyword">this</span>, key );
+		});
+	}
+});
+
+<span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">dataAttr</span>(<span class="hljs-params"> elem, key, data </span>) </span>{</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-43">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-43">&#182;</a>
+              </div>
+              <p>If nothing was found internally, try to fetch any
+data from the HTML5 data-* attribute</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>	<span class="hljs-keyword">if</span> ( data === <span class="hljs-literal">undefined</span> &amp;&amp; elem.nodeType === <span class="hljs-number">1</span> ) {
+
+		<span class="hljs-keyword">var</span> name = <span class="hljs-string">"data-"</span> + key.replace( rmultiDash, <span class="hljs-string">"-$1"</span> ).toLowerCase();
+
+		data = elem.getAttribute( name );
+
+		<span class="hljs-keyword">if</span> ( <span class="hljs-keyword">typeof</span> data === <span class="hljs-string">"string"</span> ) {
+			<span class="hljs-keyword">try</span> {
+				data = data === <span class="hljs-string">"true"</span> ? <span class="hljs-literal">true</span> :
+				data === <span class="hljs-string">"false"</span> ? <span class="hljs-literal">false</span> :
+				data === <span class="hljs-string">"null"</span> ? <span class="hljs-literal">null</span> :</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-44">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-44">&#182;</a>
+              </div>
+              <p>Only convert to a number if it doesn’t change the string</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>				+data + <span class="hljs-string">""</span> === data ? +data :
+				rbrace.test( data ) ? jQuery.parseJSON( data ) :
+					data;
+			} <span class="hljs-keyword">catch</span>( e ) {}</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-45">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-45">&#182;</a>
+              </div>
+              <p>Make sure we set the data so it isn’t changed later</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>			jQuery.data( elem, key, data );
+
+		} <span class="hljs-keyword">else</span> {
+			data = <span class="hljs-literal">undefined</span>;
+		}
+	}
+
+	<span class="hljs-keyword">return</span> data;
+}</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-46">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-46">&#182;</a>
+              </div>
+              <p>checks a cache object for emptiness</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre><span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">isEmptyDataObject</span>(<span class="hljs-params"> obj </span>) </span>{
+	<span class="hljs-keyword">var</span> name;
+	<span class="hljs-keyword">for</span> ( name <span class="hljs-keyword">in</span> obj ) {</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-47">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-47">&#182;</a>
+              </div>
+              <p>if the public data object is empty, the private is still empty</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>		<span class="hljs-keyword">if</span> ( name === <span class="hljs-string">"data"</span> &amp;&amp; jQuery.isEmptyObject( obj[name] ) ) {
+			<span class="hljs-keyword">continue</span>;
+		}
+		<span class="hljs-keyword">if</span> ( name !== <span class="hljs-string">"toJSON"</span> ) {
+			<span class="hljs-keyword">return</span> <span class="hljs-literal">false</span>;
+		}
+	}
+
+	<span class="hljs-keyword">return</span> <span class="hljs-literal">true</span>;
+}</pre></div></div>
+            
+        </li>
+        
+    </ul>
+  </div>
+</body>
+</html>
