@@ -119,8 +119,10 @@ jQuery.extend({
 
 		return ret;
 	},
-
+	// 移除通过jquery.data设置的数据
+	// elem --- > 待移除的DOM元素和javascript对象  name--->待移除的数居名 pvt--移除的是内部数据，还是自定义数据
 	removeData: function( elem, name, pvt /* Internal Use Only */ ) {
+		// 如果elem不支持设置数据，则立刻返回
 		if ( !jQuery.acceptData( elem ) ) {
 			return;
 		}
@@ -133,14 +135,13 @@ jQuery.extend({
 			cache = isNode ? jQuery.cache : elem,
 			id = isNode ? elem[ jQuery.expando ] : jQuery.expando;
 
-		// If there is already no cache entry for this object, there is no
-		// purpose in continuing
+		// 如果数据缓存对象不存在，则返回
 		if ( !cache[ id ] ) {
 			return;
 		}
 
 		if ( name ) {
-
+			// 如果pvt为true，则指向内部数据缓存对象，否则指向自定义数据对象
 			thisCache = pvt ? cache[ id ] : cache[ id ].data;
 
 			if ( thisCache ) {
@@ -222,22 +223,26 @@ jQuery.fn.extend({
 			i = 0,
 			data = null;
 
-		// Gets all values
+		// 如果未传入参数，则返回匹配元素的第一个上的全部数据
 		if ( key === undefined ) {
 			if ( this.length ) {
+				// 调用JQuery.data: function( elem, name, data, pvt)返回该elem上绑定的全部数据
 				data = jQuery.data( elem );
 
 				if ( elem.nodeType === 1 && !jQuery._data( elem, "parsedAttrs" ) ) {
+					//没有解析第一个匹配元素HTML5的属性data-
 					attr = elem.attributes;
 					for ( l = attr.length; i < l; i++ ) {
 						name = attr[i].name;
 
 						if ( !name.indexOf( "data-" ) ) {
+							// 解析属性data-中含有的数据
 							name = jQuery.camelCase( name.substring(5) );
-
+							
 							dataAttr( elem, name, data[ name ] );
 						}
 					}
+					// 解析完设置自定义数据parsedAttrs为true
 					jQuery._data( elem, "parsedAttrs", true );
 				}
 			}
@@ -245,7 +250,7 @@ jQuery.fn.extend({
 			return data;
 		}
 
-		// Sets multiple values
+		// 如果参数key为对应，则遍历匹配的元素的集合，为每个匹配元素上批量设置数据
 		if ( typeof key === "object" ) {
 			return this.each(function() {
 				jQuery.data( this, key );
@@ -257,21 +262,22 @@ jQuery.fn.extend({
 		part = parts[1] + "!";
 
 		return jQuery.access( this, function( value ) {
-
+			//循环为选中的元素调用次方法
 			if ( value === undefined ) {
+				//如果没有传入value，则认为是读取单个数据，触发自定义数据
 				data = this.triggerHandler( "getData" + part, [ parts[0] ] );
 
-				// Try to fetch any internally stored data first
+				// 事件监听函数没有值，则尝试从自定义数据缓存中获取
 				if ( data === undefined && elem ) {
 					data = jQuery.data( elem, key );
 					data = dataAttr( elem, key, data );
 				}
-
+				//如果仍然取不到值，则去掉命名空间在尝试读取
 				return data === undefined && parts[1] ?
 					this.data( parts[0] ) :
 					data;
 			}
-
+			//传入key和value的场景，则为每个匹配元素设置任意类型的数据
 			parts[1] = value;
 			this.each(function() {
 				var self = jQuery( this );
@@ -289,12 +295,11 @@ jQuery.fn.extend({
 		});
 	}
 });
-
+// 解析HTML5属性data-,并把解析结果放到DOM元素关联的自定义数据缓存对象中
 function dataAttr( elem, key, data ) {
-	// If nothing was found internally, try to fetch any
-	// data from the HTML5 data-* attribute
+	// 只有参数data没有值得情况下，才会解析html5属性，优先读取自定义数据对象
 	if ( data === undefined && elem.nodeType === 1 ) {
-
+		//增加前缀data-，并把驼峰式参数转换成连字符。
 		var name = "data-" + key.replace( rmultiDash, "-$1" ).toLowerCase();
 
 		data = elem.getAttribute( name );
@@ -310,10 +315,11 @@ function dataAttr( elem, key, data ) {
 					data;
 			} catch( e ) {}
 
-			// Make sure we set the data so it isn't changed later
+			// 放到关联的自定义对象中，jquery.cache[id].data上
 			jQuery.data( elem, key, data );
 
 		} else {
+			//如果返回值不是字符串，则返回未定义
 			data = undefined;
 		}
 	}
