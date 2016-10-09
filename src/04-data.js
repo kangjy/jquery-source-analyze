@@ -23,8 +23,9 @@ jQuery.extend({
 		"object": "clsid:D27CDB6E-AE6D-11cf-96B8-444553540000",
 		"applet": true
 	},
-
+	// 判断一个DOM元素或javascript对象是否，如果没有关联的数据，返回false
 	hasData: function( elem ) {
+		//对于DOM元素需要从全局缓存对象jQuery.cache中获取，对应js对象，则直接读取 elem[ jQuery.expando ]
 		elem = elem.nodeType ? jQuery.cache[ elem[jQuery.expando] ] : elem[ jQuery.expando ];
 		return !!elem && !isEmptyDataObject( elem );
 	},

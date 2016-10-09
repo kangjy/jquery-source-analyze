@@ -39,6 +39,11 @@
                   04-data.js
                 </a>
               
+                
+                <a class="source" href="05-queue.html">
+                  05-queue.js
+                </a>
+              
             </div>
           </div>
         </li>
@@ -149,11 +154,6 @@ attempt to add expando properties to them.</p>
             
             <div class="content"><div class='highlight'><pre>		<span class="hljs-string">"object"</span>: <span class="hljs-string">"clsid:D27CDB6E-AE6D-11cf-96B8-444553540000"</span>,
 		<span class="hljs-string">"applet"</span>: <span class="hljs-literal">true</span>
-	},
-
-	hasData: <span class="hljs-function"><span class="hljs-keyword">function</span>(<span class="hljs-params"> elem </span>) </span>{
-		elem = elem.nodeType ? jQuery.cache[ elem[jQuery.expando] ] : elem[ jQuery.expando ];
-		<span class="hljs-keyword">return</span> !!elem &amp;&amp; !isEmptyDataObject( elem );
 	},</pre></div></div>
             
         </li>
@@ -165,11 +165,11 @@ attempt to add expando properties to them.</p>
               <div class="pilwrap ">
                 <a class="pilcrow" href="#section-7">&#182;</a>
               </div>
-              <p>elem==&gt;与数据关联的的DOM元素  name==&gt;设置或读取的数据名 data==&gt;设置的数据值 pvt==&gt;表示设置的数据是内部数据还是自定义数据，该选项值在jq内部使用</p>
+              <p>判断一个DOM元素或javascript对象是否，如果没有关联的数据，返回false</p>
 
             </div>
             
-            <div class="content"><div class='highlight'><pre>	data: <span class="hljs-function"><span class="hljs-keyword">function</span>(<span class="hljs-params"> elem, name, data, pvt <span class="hljs-comment">/* Internal Use Only */</span> </span>) </span>{</pre></div></div>
+            <div class="content"><div class='highlight'><pre>	hasData: <span class="hljs-function"><span class="hljs-keyword">function</span>(<span class="hljs-params"> elem </span>) </span>{</pre></div></div>
             
         </li>
         
@@ -179,6 +179,38 @@ attempt to add expando properties to them.</p>
               
               <div class="pilwrap ">
                 <a class="pilcrow" href="#section-8">&#182;</a>
+              </div>
+              <p>对于DOM元素需要从全局缓存对象jQuery.cache中获取，对应js对象，则直接读取 elem[ jQuery.expando ]</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>		elem = elem.nodeType ? jQuery.cache[ elem[jQuery.expando] ] : elem[ jQuery.expando ];
+		<span class="hljs-keyword">return</span> !!elem &amp;&amp; !isEmptyDataObject( elem );
+	},</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-9">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-9">&#182;</a>
+              </div>
+              <p>elem==&gt;与数据关联的的DOM元素  name==&gt;设置或读取的数据名 data==&gt;设置的数据值 pvt==&gt;表示设置的数据是内部数据还是自定义数据，该选项值在jq内部使用</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>	data: <span class="hljs-function"><span class="hljs-keyword">function</span>(<span class="hljs-params"> elem, name, data, pvt <span class="hljs-comment">/* Internal Use Only */</span> </span>) </span>{</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-10">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-10">&#182;</a>
               </div>
               <p>节点elem是否支持设置数据，如果不支持，直接返回</p>
 
@@ -196,11 +228,11 @@ attempt to add expando properties to them.</p>
         </li>
         
         
-        <li id="section-9">
+        <li id="section-11">
             <div class="annotation">
               
               <div class="pilwrap ">
-                <a class="pilcrow" href="#section-9">&#182;</a>
+                <a class="pilcrow" href="#section-11">&#182;</a>
               </div>
               <p>判断是否是node节点</p>
 
@@ -211,11 +243,11 @@ attempt to add expando properties to them.</p>
         </li>
         
         
-        <li id="section-10">
+        <li id="section-12">
             <div class="annotation">
               
               <div class="pilwrap ">
-                <a class="pilcrow" href="#section-10">&#182;</a>
+                <a class="pilcrow" href="#section-12">&#182;</a>
               </div>
               <p>如果是dom元素，为了避免js和DOM元素之间的循环引用，导致内存溢出，使用全局缓存对象</p>
 
@@ -226,11 +258,11 @@ attempt to add expando properties to them.</p>
         </li>
         
         
-        <li id="section-11">
+        <li id="section-13">
             <div class="annotation">
               
               <div class="pilwrap ">
-                <a class="pilcrow" href="#section-11">&#182;</a>
+                <a class="pilcrow" href="#section-13">&#182;</a>
               </div>
               <p>尝试取出关联ID,对于DOM元素，返回elem[jQuery.expando],对于js对象，返回jQuery.expando</p>
 
@@ -241,11 +273,11 @@ attempt to add expando properties to them.</p>
         </li>
         
         
-        <li id="section-12">
+        <li id="section-14">
             <div class="annotation">
               
               <div class="pilwrap ">
-                <a class="pilcrow" href="#section-12">&#182;</a>
+                <a class="pilcrow" href="#section-14">&#182;</a>
               </div>
               <p>getByName &amp;&amp; data === undefined 表示在读数据
 (!id || !cache[id] || (!pvt &amp;&amp; !cache[id].data)如果关联id不存在，没有数据，后面的如果为真，即为没有数据，也没有自定义</p>
@@ -257,11 +289,11 @@ attempt to add expando properties to them.</p>
         </li>
         
         
-        <li id="section-13">
+        <li id="section-15">
             <div class="annotation">
               
               <div class="pilwrap ">
-                <a class="pilcrow" href="#section-13">&#182;</a>
+                <a class="pilcrow" href="#section-15">&#182;</a>
               </div>
               <p>尝试在没有任何数据上的对象上读取数据</p>
 
@@ -276,11 +308,11 @@ attempt to add expando properties to them.</p>
         </li>
         
         
-        <li id="section-14">
+        <li id="section-16">
             <div class="annotation">
               
               <div class="pilwrap ">
-                <a class="pilcrow" href="#section-14">&#182;</a>
+                <a class="pilcrow" href="#section-16">&#182;</a>
               </div>
               <p>对于DOM元素，先从删除的id获取 ，如果没有，jQuery.guid自动加1，并附在DOM元素上</p>
 
@@ -292,11 +324,11 @@ attempt to add expando properties to them.</p>
         </li>
         
         
-        <li id="section-15">
+        <li id="section-17">
             <div class="annotation">
               
               <div class="pilwrap ">
-                <a class="pilcrow" href="#section-15">&#182;</a>
+                <a class="pilcrow" href="#section-17">&#182;</a>
               </div>
               <p>对于javascript对象，关联id就是jQuery.expando</p>
 
@@ -311,11 +343,11 @@ attempt to add expando properties to them.</p>
         </li>
         
         
-        <li id="section-16">
+        <li id="section-18">
             <div class="annotation">
               
               <div class="pilwrap ">
-                <a class="pilcrow" href="#section-16">&#182;</a>
+                <a class="pilcrow" href="#section-18">&#182;</a>
               </div>
               <p>如果缓存对象不存在，则初始化为空对象</p>
 
@@ -328,11 +360,11 @@ attempt to add expando properties to them.</p>
         </li>
         
         
-        <li id="section-17">
+        <li id="section-19">
             <div class="annotation">
               
               <div class="pilwrap ">
-                <a class="pilcrow" href="#section-17">&#182;</a>
+                <a class="pilcrow" href="#section-19">&#182;</a>
               </div>
               <p>如果是js对象，重写toJSON方法，避免执行JSON.stringify()时暴露缓存数据</p>
 
@@ -345,11 +377,11 @@ attempt to add expando properties to them.</p>
         </li>
         
         
-        <li id="section-18">
+        <li id="section-20">
             <div class="annotation">
               
               <div class="pilwrap ">
-                <a class="pilcrow" href="#section-18">&#182;</a>
+                <a class="pilcrow" href="#section-20">&#182;</a>
               </div>
               <p>如果name是对象或函数，则把参数name直接合并到已经缓存的数据对象中</p>
 
@@ -368,11 +400,11 @@ attempt to add expando properties to them.</p>
         </li>
         
         
-        <li id="section-19">
+        <li id="section-21">
             <div class="annotation">
               
               <div class="pilwrap ">
-                <a class="pilcrow" href="#section-19">&#182;</a>
+                <a class="pilcrow" href="#section-21">&#182;</a>
               </div>
               <p>如果pvt为true，则变量指向cache[ id ]，如果为false，值指向cache[ id ].data,保证变量总是指向正确存储数据的对象</p>
 
@@ -391,11 +423,11 @@ attempt to add expando properties to them.</p>
         </li>
         
         
-        <li id="section-20">
+        <li id="section-22">
             <div class="annotation">
               
               <div class="pilwrap ">
-                <a class="pilcrow" href="#section-20">&#182;</a>
+                <a class="pilcrow" href="#section-22">&#182;</a>
               </div>
               <p>转成驼峰式，便于在读取的时候，无论传入连字符还是驼峰式都可以读取到对应的数据</p>
 
@@ -407,11 +439,11 @@ attempt to add expando properties to them.</p>
         </li>
         
         
-        <li id="section-21">
+        <li id="section-23">
             <div class="annotation">
               
               <div class="pilwrap ">
-                <a class="pilcrow" href="#section-21">&#182;</a>
+                <a class="pilcrow" href="#section-23">&#182;</a>
               </div>
               <p>如果参数name是字符串，返回该name对应的值，备注这一块好多书写的都是很说有问题，说data是undefined才会走这个逻辑，是错误的，请注意</p>
 
@@ -422,11 +454,11 @@ attempt to add expando properties to them.</p>
         </li>
         
         
-        <li id="section-22">
+        <li id="section-24">
             <div class="annotation">
               
               <div class="pilwrap ">
-                <a class="pilcrow" href="#section-22">&#182;</a>
+                <a class="pilcrow" href="#section-24">&#182;</a>
               </div>
               <p>尝试读取参数name的数据</p>
 
@@ -439,11 +471,11 @@ attempt to add expando properties to them.</p>
         </li>
         
         
-        <li id="section-23">
+        <li id="section-25">
             <div class="annotation">
               
               <div class="pilwrap ">
-                <a class="pilcrow" href="#section-23">&#182;</a>
+                <a class="pilcrow" href="#section-25">&#182;</a>
               </div>
               <p>如果没有找到，转换参数为驼峰</p>
 
@@ -456,11 +488,11 @@ attempt to add expando properties to them.</p>
         </li>
         
         
-        <li id="section-24">
+        <li id="section-26">
             <div class="annotation">
               
               <div class="pilwrap ">
-                <a class="pilcrow" href="#section-24">&#182;</a>
+                <a class="pilcrow" href="#section-26">&#182;</a>
               </div>
               <p>如果什么都不传入，返回缓存对象</p>
 
@@ -470,10 +502,38 @@ attempt to add expando properties to them.</p>
 		}
 
 		<span class="hljs-keyword">return</span> ret;
-	},
+	},</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-27">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-27">&#182;</a>
+              </div>
+              <p>移除通过jquery.data设置的数据
+elem — &gt; 待移除的DOM元素和javascript对象  name—&gt;待移除的数居名 pvt–移除的是内部数据，还是自定义数据</p>
 
-	removeData: <span class="hljs-function"><span class="hljs-keyword">function</span>(<span class="hljs-params"> elem, name, pvt <span class="hljs-comment">/* Internal Use Only */</span> </span>) </span>{
-		<span class="hljs-keyword">if</span> ( !jQuery.acceptData( elem ) ) {
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>	removeData: <span class="hljs-function"><span class="hljs-keyword">function</span>(<span class="hljs-params"> elem, name, pvt <span class="hljs-comment">/* Internal Use Only */</span> </span>) </span>{</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-28">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-28">&#182;</a>
+              </div>
+              <p>如果elem不支持设置数据，则立刻返回</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>		<span class="hljs-keyword">if</span> ( !jQuery.acceptData( elem ) ) {
 			<span class="hljs-keyword">return</span>;
 		}
 
@@ -484,11 +544,11 @@ attempt to add expando properties to them.</p>
         </li>
         
         
-        <li id="section-25">
+        <li id="section-29">
             <div class="annotation">
               
               <div class="pilwrap ">
-                <a class="pilcrow" href="#section-25">&#182;</a>
+                <a class="pilcrow" href="#section-29">&#182;</a>
               </div>
               <p>See jQuery.data for more information</p>
 
@@ -500,14 +560,13 @@ attempt to add expando properties to them.</p>
         </li>
         
         
-        <li id="section-26">
+        <li id="section-30">
             <div class="annotation">
               
               <div class="pilwrap ">
-                <a class="pilcrow" href="#section-26">&#182;</a>
+                <a class="pilcrow" href="#section-30">&#182;</a>
               </div>
-              <p>If there is already no cache entry for this object, there is no
-purpose in continuing</p>
+              <p>如果数据缓存对象不存在，则返回</p>
 
             </div>
             
@@ -515,20 +574,33 @@ purpose in continuing</p>
 			<span class="hljs-keyword">return</span>;
 		}
 
-		<span class="hljs-keyword">if</span> ( name ) {
+		<span class="hljs-keyword">if</span> ( name ) {</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-31">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-31">&#182;</a>
+              </div>
+              <p>如果pvt为true，则指向内部数据缓存对象，否则指向自定义数据对象</p>
 
-			thisCache = pvt ? cache[ id ] : cache[ id ].data;
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>			thisCache = pvt ? cache[ id ] : cache[ id ].data;
 
 			<span class="hljs-keyword">if</span> ( thisCache ) {</pre></div></div>
             
         </li>
         
         
-        <li id="section-27">
+        <li id="section-32">
             <div class="annotation">
               
               <div class="pilwrap ">
-                <a class="pilcrow" href="#section-27">&#182;</a>
+                <a class="pilcrow" href="#section-32">&#182;</a>
               </div>
               <p>Support array or space separated string names for data keys</p>
 
@@ -539,11 +611,11 @@ purpose in continuing</p>
         </li>
         
         
-        <li id="section-28">
+        <li id="section-33">
             <div class="annotation">
               
               <div class="pilwrap ">
-                <a class="pilcrow" href="#section-28">&#182;</a>
+                <a class="pilcrow" href="#section-33">&#182;</a>
               </div>
               <p>try the string as a key before any manipulation</p>
 
@@ -556,11 +628,11 @@ purpose in continuing</p>
         </li>
         
         
-        <li id="section-29">
+        <li id="section-34">
             <div class="annotation">
               
               <div class="pilwrap ">
-                <a class="pilcrow" href="#section-29">&#182;</a>
+                <a class="pilcrow" href="#section-34">&#182;</a>
               </div>
               <p>split the camel cased version by spaces unless a key with the spaces exists</p>
 
@@ -582,11 +654,11 @@ purpose in continuing</p>
         </li>
         
         
-        <li id="section-30">
+        <li id="section-35">
             <div class="annotation">
               
               <div class="pilwrap ">
-                <a class="pilcrow" href="#section-30">&#182;</a>
+                <a class="pilcrow" href="#section-35">&#182;</a>
               </div>
               <p>If there is no data left in the cache, we want to continue
 and let the cache object itself get destroyed</p>
@@ -602,11 +674,11 @@ and let the cache object itself get destroyed</p>
         </li>
         
         
-        <li id="section-31">
+        <li id="section-36">
             <div class="annotation">
               
               <div class="pilwrap ">
-                <a class="pilcrow" href="#section-31">&#182;</a>
+                <a class="pilcrow" href="#section-36">&#182;</a>
               </div>
               <p>See jQuery.data for more information</p>
 
@@ -618,11 +690,11 @@ and let the cache object itself get destroyed</p>
         </li>
         
         
-        <li id="section-32">
+        <li id="section-37">
             <div class="annotation">
               
               <div class="pilwrap ">
-                <a class="pilcrow" href="#section-32">&#182;</a>
+                <a class="pilcrow" href="#section-37">&#182;</a>
               </div>
               <p>Don’t destroy the parent cache unless the internal data object
 had been the only thing left in it</p>
@@ -637,11 +709,11 @@ had been the only thing left in it</p>
         </li>
         
         
-        <li id="section-33">
+        <li id="section-38">
             <div class="annotation">
               
               <div class="pilwrap ">
-                <a class="pilcrow" href="#section-33">&#182;</a>
+                <a class="pilcrow" href="#section-38">&#182;</a>
               </div>
               <p>Destroy the cache</p>
 
@@ -653,11 +725,11 @@ had been the only thing left in it</p>
         </li>
         
         
-        <li id="section-34">
+        <li id="section-39">
             <div class="annotation">
               
               <div class="pilwrap ">
-                <a class="pilcrow" href="#section-34">&#182;</a>
+                <a class="pilcrow" href="#section-39">&#182;</a>
               </div>
               <p>Use delete when supported for expandos or <code>cache</code> is not a window per isWindow (#10080)</p>
 
@@ -669,11 +741,11 @@ had been the only thing left in it</p>
         </li>
         
         
-        <li id="section-35">
+        <li id="section-40">
             <div class="annotation">
               
               <div class="pilwrap ">
-                <a class="pilcrow" href="#section-35">&#182;</a>
+                <a class="pilcrow" href="#section-40">&#182;</a>
               </div>
               <p>When all else fails, null</p>
 
@@ -687,11 +759,11 @@ had been the only thing left in it</p>
         </li>
         
         
-        <li id="section-36">
+        <li id="section-41">
             <div class="annotation">
               
               <div class="pilwrap ">
-                <a class="pilcrow" href="#section-36">&#182;</a>
+                <a class="pilcrow" href="#section-41">&#182;</a>
               </div>
               <p>For internal use only.</p>
 
@@ -704,11 +776,11 @@ had been the only thing left in it</p>
         </li>
         
         
-        <li id="section-37">
+        <li id="section-42">
             <div class="annotation">
               
               <div class="pilwrap ">
-                <a class="pilcrow" href="#section-37">&#182;</a>
+                <a class="pilcrow" href="#section-42">&#182;</a>
               </div>
               <p>判断DOM元素是否可以设置数据</p>
 
@@ -719,11 +791,11 @@ had been the only thing left in it</p>
         </li>
         
         
-        <li id="section-38">
+        <li id="section-43">
             <div class="annotation">
               
               <div class="pilwrap ">
-                <a class="pilcrow" href="#section-38">&#182;</a>
+                <a class="pilcrow" href="#section-43">&#182;</a>
               </div>
               <p>在embed，object(false除外)，applet元素上附加属性会抛出异常</p>
 
@@ -734,11 +806,11 @@ had been the only thing left in it</p>
         </li>
         
         
-        <li id="section-39">
+        <li id="section-44">
             <div class="annotation">
               
               <div class="pilwrap ">
-                <a class="pilcrow" href="#section-39">&#182;</a>
+                <a class="pilcrow" href="#section-44">&#182;</a>
               </div>
               <p>默认返回true，最后一个判断判断如果为flash，则返回true</p>
 
@@ -758,32 +830,88 @@ jQuery.fn.extend({
         </li>
         
         
-        <li id="section-40">
+        <li id="section-45">
             <div class="annotation">
               
               <div class="pilwrap ">
-                <a class="pilcrow" href="#section-40">&#182;</a>
+                <a class="pilcrow" href="#section-45">&#182;</a>
               </div>
-              <p>Gets all values</p>
+              <p>如果未传入参数，则返回匹配元素的第一个上的全部数据</p>
 
             </div>
             
             <div class="content"><div class='highlight'><pre>		<span class="hljs-keyword">if</span> ( key === <span class="hljs-literal">undefined</span> ) {
-			<span class="hljs-keyword">if</span> ( <span class="hljs-keyword">this</span>.length ) {
-				data = jQuery.data( elem );
+			<span class="hljs-keyword">if</span> ( <span class="hljs-keyword">this</span>.length ) {</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-46">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-46">&#182;</a>
+              </div>
+              <p>调用JQuery.data: function( elem, name, data, pvt)返回该elem上绑定的全部数据</p>
 
-				<span class="hljs-keyword">if</span> ( elem.nodeType === <span class="hljs-number">1</span> &amp;&amp; !jQuery._data( elem, <span class="hljs-string">"parsedAttrs"</span> ) ) {
-					attr = elem.attributes;
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>				data = jQuery.data( elem );
+
+				<span class="hljs-keyword">if</span> ( elem.nodeType === <span class="hljs-number">1</span> &amp;&amp; !jQuery._data( elem, <span class="hljs-string">"parsedAttrs"</span> ) ) {</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-47">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-47">&#182;</a>
+              </div>
+              <p>没有解析第一个匹配元素HTML5的属性data-</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>					attr = elem.attributes;
 					<span class="hljs-keyword">for</span> ( l = attr.length; i &lt; l; i++ ) {
 						name = attr[i].name;
 
-						<span class="hljs-keyword">if</span> ( !name.indexOf( <span class="hljs-string">"data-"</span> ) ) {
-							name = jQuery.camelCase( name.substring(<span class="hljs-number">5</span>) );
+						<span class="hljs-keyword">if</span> ( !name.indexOf( <span class="hljs-string">"data-"</span> ) ) {</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-48">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-48">&#182;</a>
+              </div>
+              <p>解析属性data-中含有的数据</p>
 
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>							name = jQuery.camelCase( name.substring(<span class="hljs-number">5</span>) );
+							
 							dataAttr( elem, name, data[ name ] );
 						}
-					}
-					jQuery._data( elem, <span class="hljs-string">"parsedAttrs"</span>, <span class="hljs-literal">true</span> );
+					}</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-49">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-49">&#182;</a>
+              </div>
+              <p>解析完设置自定义数据parsedAttrs为true</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>					jQuery._data( elem, <span class="hljs-string">"parsedAttrs"</span>, <span class="hljs-literal">true</span> );
 				}
 			}
 
@@ -793,13 +921,13 @@ jQuery.fn.extend({
         </li>
         
         
-        <li id="section-41">
+        <li id="section-50">
             <div class="annotation">
               
               <div class="pilwrap ">
-                <a class="pilcrow" href="#section-41">&#182;</a>
+                <a class="pilcrow" href="#section-50">&#182;</a>
               </div>
-              <p>Sets multiple values</p>
+              <p>如果参数key为对应，则遍历匹配的元素的集合，为每个匹配元素上批量设置数据</p>
 
             </div>
             
@@ -813,35 +941,88 @@ jQuery.fn.extend({
 		parts[<span class="hljs-number">1</span>] = parts[<span class="hljs-number">1</span>] ? <span class="hljs-string">"."</span> + parts[<span class="hljs-number">1</span>] : <span class="hljs-string">""</span>;
 		part = parts[<span class="hljs-number">1</span>] + <span class="hljs-string">"!"</span>;
 
-		<span class="hljs-keyword">return</span> jQuery.access( <span class="hljs-keyword">this</span>, <span class="hljs-function"><span class="hljs-keyword">function</span>(<span class="hljs-params"> value </span>) </span>{
-
-			<span class="hljs-keyword">if</span> ( value === <span class="hljs-literal">undefined</span> ) {
-				data = <span class="hljs-keyword">this</span>.triggerHandler( <span class="hljs-string">"getData"</span> + part, [ parts[<span class="hljs-number">0</span>] ] );</pre></div></div>
+		<span class="hljs-keyword">return</span> jQuery.access( <span class="hljs-keyword">this</span>, <span class="hljs-function"><span class="hljs-keyword">function</span>(<span class="hljs-params"> value </span>) </span>{</pre></div></div>
             
         </li>
         
         
-        <li id="section-42">
+        <li id="section-51">
             <div class="annotation">
               
               <div class="pilwrap ">
-                <a class="pilcrow" href="#section-42">&#182;</a>
+                <a class="pilcrow" href="#section-51">&#182;</a>
               </div>
-              <p>Try to fetch any internally stored data first</p>
+              <p>循环为选中的元素调用次方法</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>			<span class="hljs-keyword">if</span> ( value === <span class="hljs-literal">undefined</span> ) {</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-52">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-52">&#182;</a>
+              </div>
+              <p>如果没有传入value，则认为是读取单个数据，触发自定义数据</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>				data = <span class="hljs-keyword">this</span>.triggerHandler( <span class="hljs-string">"getData"</span> + part, [ parts[<span class="hljs-number">0</span>] ] );</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-53">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-53">&#182;</a>
+              </div>
+              <p>事件监听函数没有值，则尝试从自定义数据缓存中获取</p>
 
             </div>
             
             <div class="content"><div class='highlight'><pre>				<span class="hljs-keyword">if</span> ( data === <span class="hljs-literal">undefined</span> &amp;&amp; elem ) {
 					data = jQuery.data( elem, key );
 					data = dataAttr( elem, key, data );
-				}
+				}</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-54">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-54">&#182;</a>
+              </div>
+              <p>如果仍然取不到值，则去掉命名空间在尝试读取</p>
 
-				<span class="hljs-keyword">return</span> data === <span class="hljs-literal">undefined</span> &amp;&amp; parts[<span class="hljs-number">1</span>] ?
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>				<span class="hljs-keyword">return</span> data === <span class="hljs-literal">undefined</span> &amp;&amp; parts[<span class="hljs-number">1</span>] ?
 					<span class="hljs-keyword">this</span>.data( parts[<span class="hljs-number">0</span>] ) :
 					data;
-			}
+			}</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-55">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-55">&#182;</a>
+              </div>
+              <p>传入key和value的场景，则为每个匹配元素设置任意类型的数据</p>
 
-			parts[<span class="hljs-number">1</span>] = value;
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>			parts[<span class="hljs-number">1</span>] = value;
 			<span class="hljs-keyword">this</span>.each(<span class="hljs-function"><span class="hljs-keyword">function</span>(<span class="hljs-params"></span>) </span>{
 				<span class="hljs-keyword">var</span> self = jQuery( <span class="hljs-keyword">this</span> );
 
@@ -857,27 +1038,52 @@ jQuery.fn.extend({
 			jQuery.removeData( <span class="hljs-keyword">this</span>, key );
 		});
 	}
-});
-
-<span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">dataAttr</span>(<span class="hljs-params"> elem, key, data </span>) </span>{</pre></div></div>
+});</pre></div></div>
             
         </li>
         
         
-        <li id="section-43">
+        <li id="section-56">
             <div class="annotation">
               
               <div class="pilwrap ">
-                <a class="pilcrow" href="#section-43">&#182;</a>
+                <a class="pilcrow" href="#section-56">&#182;</a>
               </div>
-              <p>If nothing was found internally, try to fetch any
-data from the HTML5 data-* attribute</p>
+              <p>解析HTML5属性data-,并把解析结果放到DOM元素关联的自定义数据缓存对象中</p>
 
             </div>
             
-            <div class="content"><div class='highlight'><pre>	<span class="hljs-keyword">if</span> ( data === <span class="hljs-literal">undefined</span> &amp;&amp; elem.nodeType === <span class="hljs-number">1</span> ) {
+            <div class="content"><div class='highlight'><pre><span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">dataAttr</span>(<span class="hljs-params"> elem, key, data </span>) </span>{</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-57">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-57">&#182;</a>
+              </div>
+              <p>只有参数data没有值得情况下，才会解析html5属性，优先读取自定义数据对象</p>
 
-		<span class="hljs-keyword">var</span> name = <span class="hljs-string">"data-"</span> + key.replace( rmultiDash, <span class="hljs-string">"-$1"</span> ).toLowerCase();
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>	<span class="hljs-keyword">if</span> ( data === <span class="hljs-literal">undefined</span> &amp;&amp; elem.nodeType === <span class="hljs-number">1</span> ) {</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-58">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-58">&#182;</a>
+              </div>
+              <p>增加前缀data-，并把驼峰式参数转换成连字符。</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>		<span class="hljs-keyword">var</span> name = <span class="hljs-string">"data-"</span> + key.replace( rmultiDash, <span class="hljs-string">"-$1"</span> ).toLowerCase();
 
 		data = elem.getAttribute( name );
 
@@ -890,11 +1096,11 @@ data from the HTML5 data-* attribute</p>
         </li>
         
         
-        <li id="section-44">
+        <li id="section-59">
             <div class="annotation">
               
               <div class="pilwrap ">
-                <a class="pilcrow" href="#section-44">&#182;</a>
+                <a class="pilcrow" href="#section-59">&#182;</a>
               </div>
               <p>Only convert to a number if it doesn’t change the string</p>
 
@@ -908,20 +1114,34 @@ data from the HTML5 data-* attribute</p>
         </li>
         
         
-        <li id="section-45">
+        <li id="section-60">
             <div class="annotation">
               
               <div class="pilwrap ">
-                <a class="pilcrow" href="#section-45">&#182;</a>
+                <a class="pilcrow" href="#section-60">&#182;</a>
               </div>
-              <p>Make sure we set the data so it isn’t changed later</p>
+              <p>放到关联的自定义对象中，jquery.cache[id].data上</p>
 
             </div>
             
             <div class="content"><div class='highlight'><pre>			jQuery.data( elem, key, data );
 
-		} <span class="hljs-keyword">else</span> {
-			data = <span class="hljs-literal">undefined</span>;
+		} <span class="hljs-keyword">else</span> {</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-61">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-61">&#182;</a>
+              </div>
+              <p>如果返回值不是字符串，则返回未定义</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>			data = <span class="hljs-literal">undefined</span>;
 		}
 	}
 
@@ -931,11 +1151,11 @@ data from the HTML5 data-* attribute</p>
         </li>
         
         
-        <li id="section-46">
+        <li id="section-62">
             <div class="annotation">
               
               <div class="pilwrap ">
-                <a class="pilcrow" href="#section-46">&#182;</a>
+                <a class="pilcrow" href="#section-62">&#182;</a>
               </div>
               <p>checks a cache object for emptiness</p>
 
@@ -948,11 +1168,11 @@ data from the HTML5 data-* attribute</p>
         </li>
         
         
-        <li id="section-47">
+        <li id="section-63">
             <div class="annotation">
               
               <div class="pilwrap ">
-                <a class="pilcrow" href="#section-47">&#182;</a>
+                <a class="pilcrow" href="#section-63">&#182;</a>
               </div>
               <p>if the public data object is empty, the private is still empty</p>
 
